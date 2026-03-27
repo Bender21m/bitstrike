@@ -468,6 +468,73 @@ roger:{name:'ROGER VER',color:0x00aa00,hp:45,speed:.028,damage:8,reward:6000,tau
 let enemies=[],pickups=[],killFeed=[],taunts=[];
 let round=1,started=false,gameOver=false;
 
+
+// Procedural textures for enemies
+function makeSkinTex(){const c=document.createElement('canvas');c.width=128;c.height=128;const x=c.getContext('2d');
+x.fillStyle='#c4956a';x.fillRect(0,0,128,128);
+for(let i=0;i<200;i++){x.fillStyle='rgba('+(180+Math.random()*30)+','+(140+Math.random()*20)+','+(100+Math.random()*20)+',0.3)';
+x.fillRect(Math.random()*128,Math.random()*128,3+Math.random()*5,3+Math.random()*5)}
+return new THREE.CanvasTexture(c)}
+
+function makeSuitTex(r,g,b){const c=document.createElement('canvas');c.width=128;c.height=128;const x=c.getContext('2d');
+x.fillStyle='rgb('+r+','+g+','+b+')';x.fillRect(0,0,128,128);
+// Pinstripe pattern
+x.strokeStyle='rgba(255,255,255,0.06)';x.lineWidth=1;
+for(let i=0;i<128;i+=6){x.beginPath();x.moveTo(i,0);x.lineTo(i,128);x.stroke()}
+// Fabric texture noise
+for(let i=0;i<500;i++){const rr=Math.random()*40-20;
+x.fillStyle='rgba('+(r+rr)+','+(g+rr)+','+(b+rr)+',0.2)';
+x.fillRect(Math.random()*128,Math.random()*128,2,2)}
+return new THREE.CanvasTexture(c)}
+
+function makePantsTex(r,g,b){const c=document.createElement('canvas');c.width=64;c.height=64;const x=c.getContext('2d');
+x.fillStyle='rgb('+r+','+g+','+b+')';x.fillRect(0,0,64,64);
+for(let i=0;i<200;i++){const rr=Math.random()*20-10;
+x.fillStyle='rgba('+(r+rr)+','+(g+rr)+','+(b+rr)+',0.25)';
+x.fillRect(Math.random()*64,Math.random()*64,2,3)}
+return new THREE.CanvasTexture(c)}
+
+function makeFaceTex(){const c=document.createElement('canvas');c.width=256;c.height=256;const x=c.getContext('2d');
+// Skin base
+x.fillStyle='#c4956a';x.fillRect(0,0,256,256);
+// Skin variation
+for(let i=0;i<500;i++){x.fillStyle='rgba('+(185+Math.random()*25)+','+(140+Math.random()*20)+','+(95+Math.random()*20)+',0.15)';
+x.fillRect(Math.random()*256,Math.random()*256,4+Math.random()*8,4+Math.random()*8)}
+// Eyebrows
+x.fillStyle='#3a2a1a';
+x.fillRect(70,75,45,6);x.fillRect(140,75,45,6);
+// Eye sockets (darker)
+x.fillStyle='rgba(0,0,0,0.15)';
+x.beginPath();x.arc(92,100,22,0,Math.PI*2);x.fill();
+x.beginPath();x.arc(163,100,22,0,Math.PI*2);x.fill();
+// Eyes white
+x.fillStyle='#eee';
+x.beginPath();x.arc(92,100,15,0,Math.PI*2);x.fill();
+x.beginPath();x.arc(163,100,15,0,Math.PI*2);x.fill();
+// Irises (red for enemies)
+x.fillStyle='#cc0000';
+x.beginPath();x.arc(92,100,8,0,Math.PI*2);x.fill();
+x.beginPath();x.arc(163,100,8,0,Math.PI*2);x.fill();
+// Pupils
+x.fillStyle='#000';
+x.beginPath();x.arc(92,100,4,0,Math.PI*2);x.fill();
+x.beginPath();x.arc(163,100,4,0,Math.PI*2);x.fill();
+// Nose shadow
+x.fillStyle='rgba(0,0,0,0.12)';
+x.beginPath();x.moveTo(120,105);x.lineTo(128,140);x.lineTo(136,105);x.fill();
+// Mouth
+x.fillStyle='#8a3030';
+x.beginPath();x.arc(128,170,15,0,Math.PI);x.fill();
+// Jaw shadow
+x.fillStyle='rgba(0,0,0,0.08)';
+x.fillRect(60,190,136,30);
+// 5 o'clock shadow
+x.fillStyle='rgba(50,40,30,0.1)';
+x.fillRect(75,155,106,50);
+return new THREE.CanvasTexture(c)}
+
+const _skinTex=makeSkinTex();const _faceTex=makeFaceTex();
+
 function createEnemyMesh(type){
 const et=ENEMY_TYPES[type];const g=new THREE.Group();
 const bodyH=type==='fed'?1.4:type==='adam'?1.2:1.1;
@@ -475,13 +542,13 @@ const bodyW=type==='fed'?.5:type==='adam'?.5:.4;
 const skinColor=new THREE.Color(et.color).multiplyScalar(1.3);
 const clothColor=new THREE.Color(et.color);
 const darkColor=new THREE.Color(et.color).multiplyScalar(.6);
-const clothMat=new THREE.MeshStandardMaterial({color:clothColor,roughness:.7,metalness:.15});
-const skinMat=new THREE.MeshStandardMaterial({color:skinColor,roughness:.6,metalness:.1});
-const darkMat=new THREE.MeshStandardMaterial({color:darkColor,roughness:.8,metalness:.1});
+const suitColors={banker:[100,100,120],shitcoiner:[150,50,200],bear:[180,80,80],roger:[0,120,0],adam:[68,136,204],fed:[30,30,50]};const sc2=suitColors[type]||[100,100,100];const clothMat=new THREE.MeshStandardMaterial({map:makeSuitTex(sc2[0],sc2[1],sc2[2]),roughness:.7,metalness:.15});
+const skinMat=new THREE.MeshStandardMaterial({map:_skinTex,roughness:.6,metalness:.1});
+const darkPantsC={banker:[40,40,50],shitcoiner:[60,20,80],bear:[70,30,30],roger:[30,50,30],adam:[30,50,80],fed:[15,15,25]};const dp=darkPantsC[type]||[40,40,40];const darkMat=new THREE.MeshStandardMaterial({map:makePantsTex(dp[0],dp[1],dp[2]),roughness:.8,metalness:.1});
 const shoeMat=new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:.8,metalness:.2});
 // HEAD (high poly sphere + facial features)
 const headG=new THREE.Group();
-const skull=new THREE.Mesh(new THREE.SphereGeometry(.16,24,24),skinMat);headG.add(skull);
+const skull=new THREE.Mesh(new THREE.SphereGeometry(.16,24,24),new THREE.MeshStandardMaterial({map:_faceTex,roughness:.6,metalness:.1}));headG.add(skull);
 // Nose
 const nose=new THREE.Mesh(new THREE.ConeGeometry(.03,.06,12),skinMat);
 nose.rotation.x=-Math.PI/2;nose.position.set(0,-.02,-.15);headG.add(nose);
