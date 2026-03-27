@@ -126,7 +126,7 @@ document.body.prepend(renderer.domElement);
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x0a0a15);
-scene.fog=new THREE.FogExp2(0x0a0a15,.06);
+scene.fog=new THREE.FogExp2(0x0a0a15,.03);
 
 const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,.1,100);
 camera.position.set(2.5,.8,2.5);
@@ -134,7 +134,7 @@ camera.position.set(2.5,.8,2.5);
 window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
 
 // ===== LIGHTING =====
-const ambient=new THREE.AmbientLight(0x334455,.3);scene.add(ambient);
+const ambient=new THREE.AmbientLight(0x666666,.5);scene.add(ambient);
 
 const dirLight=new THREE.DirectionalLight(0xffeedd,.4);
 dirLight.position.set(10,15,10);dirLight.castShadow=true;
@@ -147,7 +147,7 @@ const btcLight=new THREE.PointLight(0xf7931a,.5,15);btcLight.position.set(12,3,1
 const btcLight2=new THREE.PointLight(0xf7931a,.3,10);btcLight2.position.set(5,3,18);scene.add(btcLight2);
 
 // Player flashlight
-const flashlight=new THREE.SpotLight(0xffffff,.8,20,Math.PI*.25,.5,1);
+const flashlight=new THREE.SpotLight(0xffffff,1.5,25,Math.PI*.25,.5,1);
 flashlight.castShadow=true;flashlight.shadow.mapSize.set(512,512);
 camera.add(flashlight);flashlight.position.set(0,0,0);flashlight.target.position.set(0,0,-1);
 camera.add(flashlight.target);scene.add(camera);
