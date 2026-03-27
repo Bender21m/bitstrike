@@ -564,7 +564,7 @@ for(const e of enemies){if(e.health<=0)continue;const et=ENEMY_TYPES[e.type];con
 for(const p of pickups){miniX.fillStyle='#f7931a';miniX.beginPath();miniX.arc(p.x*s,p.z*s,2,0,Math.PI*2);miniX.fill()}}
 
 // ===== START =====
-document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
+document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;roundActive=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
 renderer.domElement.addEventListener('click',()=>{if(started&&!isMobile)renderer.domElement.requestPointerLock()});
 // Buy menu handlers
 document.querySelectorAll('.buy-item').forEach(el=>{el.addEventListener('click',()=>{
@@ -641,15 +641,13 @@ p.mesh.children[0].rotation.y+=dt*2;
 if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'+p.sats+' SATS');playSound('sats');scene.remove(p.mesh);pickups.splice(i,1)}}
 // Round
 if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;
-// Start buy phase
 buyPhase=true;buyTimer=BUY_TIME;
 document.getElementById('buy-menu').style.display='flex';
 document.getElementById('buy-balance').textContent=player.sats.toLocaleString();
-// Award round bonus
-const roundBonus=3000+round*500;player.sats+=roundBonus;addKill('ROUND WON! +'+roundBonus+' sats bonus');const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');}}document.getElementById('round-info').textContent='₿ITCOINERS | ROUND '+round+' — '+rn+' | W:'+roundWins;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=100;
-// Free pistol each round
-weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35;
-weapons.forEach(w=>{if(w.ammo>0)w.reserve+=w.maxAmmo})}
+const roundBonus=3000+round*500;player.sats+=roundBonus;addKill('ROUND WON! +'+roundBonus+' sats bonus');
+const rn2=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];
+showMessage('ROUND '+round+' — '+rn2);playSound('round');
+document.getElementById('round-info').textContent='BITCOINERS | ROUND '+round+' — '+rn2+' | W:'+roundWins}}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
 const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-activeGun.position.y)*.08;
@@ -667,8 +665,7 @@ document.getElementById('armor').style.color=player.armor>50?'#4af':player.armor
 const fE=document.getElementById('kill-feed');fE.innerHTML='';killFeed=killFeed.filter(k=>now-k.time<5000);killFeed.forEach(k=>{const d=document.createElement('div');d.textContent=k.text;fE.appendChild(d)});
 // Reload
 if(reloading){const el=document.getElementById('message');el.textContent='RELOADING...';el.style.opacity='.6'}
-drawMinimap()}
-
+drawMinimap()
 function animate(){const dt=Math.min(clock.getDelta(),.05);
 update(dt);
 // Render main scene
