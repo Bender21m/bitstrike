@@ -686,6 +686,17 @@ p.mesh.children[0].rotation.y+=dt*2;
 if(Math.hypot(p.x-player.x,p.z-player.z)<.6){
 if(p.ammo){weapons[curWeapon].ammo=Math.min(weapons[curWeapon].ammo+10,weapons[curWeapon].maxAmmo);showMessage('+10 AMMO')}
 else{player.sats+=p.sats;}if(!p.ammo)showMessage('+'+p.sats+' SATS');playSound('sats');if(p.mesh)scene.remove(p.mesh);pickups.splice(i,1)}}
+// Buy phase timer
+if(buyPhase){buyTimer-=dt;
+var bte2=document.getElementById('buy-timer');if(bte2)bte2.textContent=Math.ceil(Math.max(0,buyTimer));
+var bme2=document.getElementById('buy-menu');
+if(bme2&&bme2.style.display!=='flex')bme2.style.display='flex';
+if(buyTimer<=0){buyPhase=false;
+if(bme2)bme2.style.display='none';
+spawnEnemies(4+round*2);spawnPickups(2+round);
+player.health=100;weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35;
+weapons.forEach(function(ww){if(ww.ammo>0)ww.reserve+=ww.maxAmmo});
+showMessage(MAPS[currentMap%MAPS.length].name+' - ROUND '+round);}}
 // Round
 if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;buyPhase=true;buyTimer=BUY_TIME;const bme=document.getElementById("buy-menu");if(bme)bme.style.display="flex";const bbe=document.getElementById("buy-balance");if(bbe)bbe.textContent=player.sats.toLocaleString();const roundBonus=3000+round*500;player.sats+=roundBonus;addKill("ROUND WON! +"+roundBonus+" sats");const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
