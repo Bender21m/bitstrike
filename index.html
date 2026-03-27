@@ -242,14 +242,14 @@ const topCvr=new THREE.Mesh(new THREE.BoxGeometry(.038,.01,.18),steel);topCvr.po
 // Dust cover ridges
 for(let i=0;i<6;i++){const ridge=new THREE.Mesh(new THREE.BoxGeometry(.04,.003,.005),steel);ridge.position.set(0,.035,-.18+i*.035);g.add(ridge)}
 // Barrel (tapered)
-const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.006,.008,.38,12),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.42);g.add(barrel);
+const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.006,.008,.38,24),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.42);g.add(barrel);
 // Barrel pin
 const pin=new THREE.Mesh(new THREE.CylinderGeometry(.009,.009,.02,8),steel);pin.rotation.x=Math.PI/2;pin.position.set(0,.012,-.21);g.add(pin);
 // Muzzle brake (slotted)
-const muzzle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.01,.04,8),darkSteel);muzzle.rotation.x=Math.PI/2;muzzle.position.set(0,.012,-.62);g.add(muzzle);
+const muzzle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.01,.04,20),darkSteel);muzzle.rotation.x=Math.PI/2;muzzle.position.set(0,.012,-.62);g.add(muzzle);
 for(let i=0;i<4;i++){const slot=new THREE.Mesh(new THREE.BoxGeometry(.025,.004,.006),new THREE.MeshStandardMaterial({color:0x000000}));slot.position.set(0,.012,-.6+i*.008);g.add(slot)}
 // Gas tube
-const gasTube=new THREE.Mesh(new THREE.CylinderGeometry(.007,.007,.2,8),darkSteel);gasTube.rotation.x=Math.PI/2;gasTube.position.set(0,.04,-.32);g.add(gasTube);
+const gasTube=new THREE.Mesh(new THREE.CylinderGeometry(.007,.007,.2,20),darkSteel);gasTube.rotation.x=Math.PI/2;gasTube.position.set(0,.04,-.32);g.add(gasTube);
 // Handguard (wood, upper)
 const hgU=new THREE.Mesh(new THREE.BoxGeometry(.032,.018,.16),wood);hgU.position.set(0,.03,-.3);g.add(hgU);
 // Handguard (wood, lower)
@@ -261,7 +261,7 @@ const magGeo=new THREE.BoxGeometry(.028,.13,.018);const mag=new THREE.Mesh(magGe
 // Mag ridges
 for(let i=0;i<4;i++){const mr=new THREE.Mesh(new THREE.BoxGeometry(.03,.003,.02),new THREE.MeshStandardMaterial({color:0x3a2a1a}));mr.position.set(0,-.04-i*.025,-.07);mr.rotation.x=.18;g.add(mr)}
 // Trigger guard
-const tgOuter=new THREE.Mesh(new THREE.TorusGeometry(.012,.002,6,8,Math.PI),steel);tgOuter.rotation.y=Math.PI/2;tgOuter.position.set(0,-.03,-.03);g.add(tgOuter);
+const tgOuter=new THREE.Mesh(new THREE.TorusGeometry(.012,.002,12,16,Math.PI),steel);tgOuter.rotation.y=Math.PI/2;tgOuter.position.set(0,-.03,-.03);g.add(tgOuter);
 // Trigger
 const trigger=new THREE.Mesh(new THREE.BoxGeometry(.003,.015,.008),steel);trigger.position.set(0,-.025,-.03);trigger.rotation.x=-.2;g.add(trigger);
 // Pistol grip
@@ -296,11 +296,11 @@ const slide=new THREE.Mesh(new THREE.BoxGeometry(.038,.042,.2),chrome);slide.pos
 // Slide serrations (rear)
 for(let i=0;i<8;i++){const ser=new THREE.Mesh(new THREE.BoxGeometry(.04,.002,.003),new THREE.MeshStandardMaterial({color:0x999999,roughness:.1,metalness:.95}));ser.position.set(0,.015,-.01+i*.006);g.add(ser)}
 // Barrel (thick, heavy)
-const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.24,12),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.02,-.28);g.add(barrel);
+const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.24,24),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.02,-.28);g.add(barrel);
 // Barrel lug
 const lug=new THREE.Mesh(new THREE.BoxGeometry(.042,.035,.06),chrome);lug.position.set(0,.01,-.22);g.add(lug);
 // Muzzle
-const muz=new THREE.Mesh(new THREE.CylinderGeometry(.012,.01,.015,10),darkSteel);muz.rotation.x=Math.PI/2;muz.position.set(0,.02,-.33);g.add(muz);
+const muz=new THREE.Mesh(new THREE.CylinderGeometry(.012,.01,.015,20),darkSteel);muz.rotation.x=Math.PI/2;muz.position.set(0,.02,-.33);g.add(muz);
 // Frame (lower)
 const frame=new THREE.Mesh(new THREE.BoxGeometry(.032,.025,.14),steel);frame.position.set(0,-.01,-.07);g.add(frame);
 // Trigger guard (angular, Deagle style)
@@ -320,14 +320,14 @@ const mag=new THREE.Mesh(new THREE.BoxGeometry(.022,.06,.024),steel);mag.positio
 // Mag base plate
 const mbp=new THREE.Mesh(new THREE.BoxGeometry(.024,.005,.026),darkSteel);mbp.position.set(0,-.095,-.005);mbp.rotation.x=-.18;g.add(mbp);
 // Front sight (red fiber optic)
-const fSight=new THREE.Mesh(new THREE.SphereGeometry(.003,6,6),redDot);fSight.position.set(0,.04,-.28);g.add(fSight);
+const fSight=new THREE.Mesh(new THREE.SphereGeometry(.003,12,12),redDot);fSight.position.set(0,.04,-.28);g.add(fSight);
 // Rear sight (notch)
 const rsL=new THREE.Mesh(new THREE.BoxGeometry(.005,.012,.005),darkSteel);rsL.position.set(-.008,.04,-.01);g.add(rsL);
 const rsR=rsL.clone();rsR.position.x=.008;g.add(rsR);
 // Hammer
 const hammer=new THREE.Mesh(new THREE.BoxGeometry(.005,.015,.008),steel);hammer.position.set(0,.02,.02);hammer.rotation.x=-.3;g.add(hammer);
 // Safety
-const safety=new THREE.Mesh(new THREE.CylinderGeometry(.004,.004,.005,6),steel);safety.rotation.z=Math.PI/2;safety.position.set(.02,.005,-.02);g.add(safety);
+const safety=new THREE.Mesh(new THREE.CylinderGeometry(.004,.004,.005,14),steel);safety.rotation.z=Math.PI/2;safety.position.set(.02,.005,-.02);g.add(safety);
 // Slide stop
 const ss=new THREE.Mesh(new THREE.BoxGeometry(.003,.008,.012),steel);ss.position.set(.018,-.005,-.05);g.add(ss);
 // Bitcoin emblem
@@ -340,34 +340,34 @@ g.scale.set(4,4,4);g.position.set(.1,-.13,-.3);g.rotation.set(0,.05,0);
 // Receiver (long action)
 const recv=new THREE.Mesh(new THREE.BoxGeometry(.042,.05,.32),steel);recv.position.set(0,0,-.16);g.add(recv);
 // Barrel (long, heavy profile)
-const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.01,.55,12),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.58);g.add(barrel);
+const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.01,.55,24),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.58);g.add(barrel);
 // Free-float handguard
 const hg=new THREE.Mesh(new THREE.BoxGeometry(.04,.04,.2),blackPoly);hg.position.set(0,.0,-.4);g.add(hg);
 // Handguard rails (picatinny)
 for(let i=0;i<12;i++){const rail=new THREE.Mesh(new THREE.BoxGeometry(.044,.003,.008),blackPoly);rail.position.set(0,.022,-.32-i*.015);g.add(rail)}
 // Muzzle brake
-const muz=new THREE.Mesh(new THREE.CylinderGeometry(.016,.014,.06,8),darkSteel);muz.rotation.x=Math.PI/2;muz.position.set(0,.012,-.86);g.add(muz);
+const muz=new THREE.Mesh(new THREE.CylinderGeometry(.016,.014,.06,20),darkSteel);muz.rotation.x=Math.PI/2;muz.position.set(0,.012,-.86);g.add(muz);
 // Muzzle brake ports
 for(let i=0;i<3;i++){const port=new THREE.Mesh(new THREE.BoxGeometry(.035,.005,.005),new THREE.MeshStandardMaterial({color:0x000000}));port.position.set(0,.012,-.84+i*.015);g.add(port)}
 // Scope mount rings
-const ring1=new THREE.Mesh(new THREE.TorusGeometry(.022,.004,8,12),darkSteel);ring1.position.set(0,.05,-.12);g.add(ring1);
+const ring1=new THREE.Mesh(new THREE.TorusGeometry(.022,.004,16,24),darkSteel);ring1.position.set(0,.05,-.12);g.add(ring1);
 const ring2=ring1.clone();ring2.position.z=-.25;g.add(ring2);
 // Scope body
-const scopeMain=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.22,12),darkSteel);scopeMain.rotation.x=Math.PI/2;scopeMain.position.set(0,.07,-.18);g.add(scopeMain);
+const scopeMain=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.22,24),darkSteel);scopeMain.rotation.x=Math.PI/2;scopeMain.position.set(0,.07,-.18);g.add(scopeMain);
 // Scope front bell (larger)
 const scopeFront=new THREE.Mesh(new THREE.CylinderGeometry(.025,.02,.04,12),darkSteel);scopeFront.rotation.x=Math.PI/2;scopeFront.position.set(0,.07,-.31);g.add(scopeFront);
 // Front lens
-const fLens=new THREE.Mesh(new THREE.CircleGeometry(.024,12),scopeLens);fLens.position.set(0,.07,-.33);g.add(fLens);
+const fLens=new THREE.Mesh(new THREE.CircleGeometry(.024,24),scopeLens);fLens.position.set(0,.07,-.33);g.add(fLens);
 // Rear lens
 const rLens=new THREE.Mesh(new THREE.CircleGeometry(.019,12),scopeLens);rLens.position.set(0,.07,-.07);rLens.rotation.y=Math.PI;g.add(rLens);
 // Scope turrets (elevation/windage)
-const turretE=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.015,8),darkSteel);turretE.position.set(0,.095,-.2);g.add(turretE);
+const turretE=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.015,16),darkSteel);turretE.position.set(0,.095,-.2);g.add(turretE);
 const turretW=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.015,8),darkSteel);turretW.rotation.z=Math.PI/2;turretW.position.set(.028,.07,-.2);g.add(turretW);
 // Scope magnification ring
 const magRing=new THREE.Mesh(new THREE.TorusGeometry(.022,.003,6,12),steel);magRing.position.set(0,.07,-.08);g.add(magRing);
 // Bolt handle
-const boltBody=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,.05,6),chrome);boltBody.rotation.x=Math.PI/2;boltBody.position.set(.025,.02,-.05);g.add(boltBody);
-const boltKnob=new THREE.Mesh(new THREE.SphereGeometry(.008,6,6),chrome);boltKnob.position.set(.025,.02,-.02);g.add(boltKnob);
+const boltBody=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,.05,16),chrome);boltBody.rotation.x=Math.PI/2;boltBody.position.set(.025,.02,-.05);g.add(boltBody);
+const boltKnob=new THREE.Mesh(new THREE.SphereGeometry(.008,14,14),chrome);boltKnob.position.set(.025,.02,-.02);g.add(boltKnob);
 // Trigger guard
 const tg=new THREE.Mesh(new THREE.BoxGeometry(.035,.003,.04),steel);tg.position.set(0,-.03,-.02);g.add(tg);
 const tgF=new THREE.Mesh(new THREE.BoxGeometry(.035,.018,.003),steel);tgF.position.set(0,-.022,-.04);g.add(tgF);
@@ -422,13 +422,13 @@ function createEnemyMesh(type){
 const et=ENEMY_TYPES[type];const g=new THREE.Group();
 const bodyH=type==='fed'?1.4:1.1;const bodyW=type==='fed'?.5:.4;
 // Body
-const body=new THREE.Mesh(new THREE.BoxGeometry(bodyW,bodyH,.3),new THREE.MeshStandardMaterial({color:et.color,roughness:.7,metalness:.2}));
+const body=new THREE.Mesh(new THREE.CapsuleGeometry(bodyW*.45,bodyH*.5,8,16),new THREE.MeshStandardMaterial({color:et.color,roughness:.7,metalness:.2}));
 body.position.y=bodyH/2+.2;body.castShadow=true;g.add(body);
 // Head
-const head=new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(1.3),roughness:.6}));
-head.position.y=bodyH+.35;head.castShadow=true;g.add(head);
+const head=new THREE.Mesh(new THREE.SphereGeometry(.18,20,20),new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(1.3),roughness:.6}));
+head.position.y=bodyH+.35;head.castShadow=true;g.add(head);const armGeo=new THREE.CapsuleGeometry(.08,.35,6,12);const armMat=new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(.85),roughness:.7});const armL=new THREE.Mesh(armGeo,armMat);armL.position.set(-(bodyW*.5+.1),bodyH*.6,0);armL.rotation.z=.15;g.add(armL);const armR=armL.clone();armR.position.x=bodyW*.5+.1;armR.rotation.z=-.15;g.add(armR);
 // Eyes (evil red)
-const eyeGeo=new THREE.SphereGeometry(.04,4,4);const eyeMat=new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xff0000,emissiveIntensity:.8});
+const eyeGeo=new THREE.SphereGeometry(.04,12,12);const eyeMat=new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xff0000,emissiveIntensity:.8});
 const eyeL=new THREE.Mesh(eyeGeo,eyeMat);eyeL.position.set(-.07,bodyH+.38,-.15);g.add(eyeL);
 const eyeR=new THREE.Mesh(eyeGeo,eyeMat);eyeR.position.set(.07,bodyH+.38,-.15);g.add(eyeR);
 // Banker tie
@@ -450,7 +450,7 @@ function spawnPickups(n){
 pickups.forEach(p=>{if(p.mesh)scene.remove(p.mesh)});
 for(let i=0;i<n;i++){let x,z;do{x=Math.floor(Math.random()*(MW-2))+1+.5;z=Math.floor(Math.random()*(MH-2))+1+.5}while(map[Math.floor(z)*MW+Math.floor(x)]!==0);
 const g=new THREE.Group();
-const coin=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.04,16),new THREE.MeshStandardMaterial({color:0xf7931a,roughness:.3,metalness:.8,emissive:0xf7931a,emissiveIntensity:.3}));
+const coin=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.04,32),new THREE.MeshStandardMaterial({color:0xf7931a,roughness:.3,metalness:.8,emissive:0xf7931a,emissiveIntensity:.3}));
 coin.rotation.x=Math.PI/2;g.add(coin);
 const light=new THREE.PointLight(0xf7931a,.4,3);g.add(light);
 g.position.set(x,.7,z);scene.add(g);
