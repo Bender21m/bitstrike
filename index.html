@@ -203,8 +203,11 @@ const wall=new THREE.Mesh(wallGeo,wallMat);wall.position.set(x+.5,1,y+.5);wall.c
 scene.add(wallGroup);
 
 // ===== PLAYER =====
-const player={x:2.5,z:2.5,angle:0,pitch:0,health:100,sats:0,kills:0};
+const player={x:2.5,z:2.5,angle:0,pitch:0,health:100,sats:16000,kills:0,armor:0,helmet:false,team:"bitcoiner"};
 let bobPhase=0,bobAmt=0,screenShake=0;
+let buyPhase=false,buyTimer=0,roundActive=false,roundWins=0,roundLosses=0;
+const WEAPON_PRICES={ak:2700,deagle:700,awp:4750,armor:1000,helmet:350};
+const BUY_TIME=10;
 
 // ===== WEAPONS =====
 const weapons=[
