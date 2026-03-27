@@ -563,8 +563,24 @@ sprayIdx++;sprayReset=Date.now();
 recoilPitch=w.recoilAmt+sprayY;screenShake=w.recoilAmt*30;player.angle+=sprayX;
 playSound(w.sndType);
 const hit=shootRay();
-/* wallbang disabled */
-if(hit){hit.health-=w.damage;hit.hit=10;playSound('hit');
+// Wall penetration
+try{if(!hit){const wdir=new THREE.Vector3(0,0,-1);wdir.applyQuaternion(camera.quaternion);
+const wray=new THREE.Raycaster(camera.position.clone(),wdir,0,50);
+const wHits=wray.intersectObjects(wallGroup.children,false);
+if(wHits.length>0&&wHits[0].distance<15){
+const throughPt=wdir.clone().multiplyScalar(wHits[0].distance+1.2).add(camera.position);
+for(const e of enemies){if(e.health<=0||!e.mesh)continue;
+const d=Math.hypot(e.x-throughPt.x,e.z-throughPt.z);
+if(d<2){e.health-=w.damage*.35;e.hit=10;playSound('hit');
+if(e.health<=0){player.kills++;const et3=ENEMY_TYPES[e.type];player.sats+=et3.reward;
+addKill('WALLBANG! '+et3.deathMsgs[Math.floor(Math.random()*et3.deathMsgs.length)]);
+playSound('kill');if(e.mesh){scene.remove(e.mesh);e.mesh=null}}break}}}}}catch(ex){}
+if(hit){const headY=hit.mesh?hit.mesh.position.y+1.4:999;
+const aimY=camera.position.y+Math.sin(player.pitch)*5;
+const isHeadshot=aimY>headY-.3;
+const dmgMult=isHeadshot?2:1;
+hit.health-=w.damage*dmgMult;hit.hit=10;playSound('hit');
+if(isHeadshot)addKill('HEADSHOT!');
 // Flash enemy red
 hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0xff0000)});
 setTimeout(()=>{hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0x000000)})},100);
@@ -614,7 +630,12 @@ const nx=player.x+mx,nz=player.z+mz;
 if(map[Math.floor(player.z)*MW+Math.floor(nx+Math.sign(mx)*margin)]===0)player.x=nx;
 if(map[Math.floor(nz+Math.sign(mz)*margin)*MW+Math.floor(player.x)]===0)player.z=nz;
 // Bob
-if(Math.abs(mx)+Math.abs(mz)>.001){bobPhase+=dt*5;bobAmt=Math.min(bobAmt+dt*8,.03)}else bobAmt*=.85;
+if(Math.abs(mx)+Math.abs(mz)>.001){bobPhase+=dt*5;
+if(Math.sin(bobPhase)>0.95)try{const fb=audioCtx.createBuffer(1,audioCtx.sampleRate*.05,audioCtx.sampleRate);
+const fd=fb.getChannelData(0);for(let fi=0;fi<fd.length;fi++)fd[fi]=(Math.random()*2-1)*.15*Math.pow(1-fi/fd.length,3);
+const fn=audioCtx.createBufferSource();fn.buffer=fb;const ff=audioCtx.createBiquadFilter();
+ff.type='lowpass';ff.frequency.value=400;const fg=audioCtx.createGain();fg.gain.value=.08;
+fn.connect(ff);ff.connect(fg);fg.connect(audioCtx.destination);fn.start()}catch(ex){}bobAmt=Math.min(bobAmt+dt*8,.03)}else bobAmt*=.85;
 // Camera
 recoilPitch*=.85;screenShake*=.85;
 camera.position.set(player.x,.8+Math.sin(bobPhase)*bobAmt*.4,player.z);
@@ -653,7 +674,9 @@ if(e.hit>0)e.hit--}
 for(let i=pickups.length-1;i>=0;i--){const p=pickups[i];p.phase+=dt*2;
 p.mesh.position.y=.7+Math.sin(p.phase)*.15;
 p.mesh.children[0].rotation.y+=dt*2;
-if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'+p.sats+' SATS');playSound('sats');scene.remove(p.mesh);pickups.splice(i,1)}}
+if(Math.hypot(p.x-player.x,p.z-player.z)<.6){
+if(p.ammo){weapons[curWeapon].ammo=Math.min(weapons[curWeapon].ammo+10,weapons[curWeapon].maxAmmo);showMessage('+10 AMMO')}
+else{player.sats+=p.sats;}if(!p.ammo)showMessage('+'+p.sats+' SATS');playSound('sats');if(p.mesh)scene.remove(p.mesh);pickups.splice(i,1)}}
 // Round
 if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;buyPhase=true;buyTimer=BUY_TIME;const bme=document.getElementById("buy-menu");if(bme)bme.style.display="flex";const bbe=document.getElementById("buy-balance");if(bbe)bbe.textContent=player.sats.toLocaleString();const roundBonus=3000+round*500;player.sats+=roundBonus;addKill("ROUND WON! +"+roundBonus+" sats");const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
