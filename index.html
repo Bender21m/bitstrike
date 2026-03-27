@@ -470,25 +470,117 @@ let round=1,started=false,gameOver=false;
 
 function createEnemyMesh(type){
 const et=ENEMY_TYPES[type];const g=new THREE.Group();
-const bodyH=type==='fed'?1.4:1.1;const bodyW=type==='fed'?.5:.4;
-// Body
-const body=new THREE.Mesh(new THREE.CapsuleGeometry(bodyW*.45,bodyH*.5,8,16),new THREE.MeshStandardMaterial({color:et.color,roughness:.7,metalness:.2}));
-body.position.y=bodyH/2+.2;body.castShadow=true;g.add(body);
-// Head
-const head=new THREE.Mesh(new THREE.SphereGeometry(.18,20,20),new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(1.3),roughness:.6}));
-head.position.y=bodyH+.35;head.castShadow=true;g.add(head);const armGeo=new THREE.CapsuleGeometry(.08,.35,6,12);const armMat=new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(.85),roughness:.7});const armL=new THREE.Mesh(armGeo,armMat);armL.position.set(-(bodyW*.5+.1),bodyH*.6,0);armL.rotation.z=.15;g.add(armL);const armR=armL.clone();armR.position.x=bodyW*.5+.1;armR.rotation.z=-.15;g.add(armR);
-// Eyes (evil red)
-const eyeGeo=new THREE.SphereGeometry(.04,12,12);const eyeMat=new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xff0000,emissiveIntensity:.8});
-const eyeL=new THREE.Mesh(eyeGeo,eyeMat);eyeL.position.set(-.07,bodyH+.38,-.15);g.add(eyeL);
-const eyeR=new THREE.Mesh(eyeGeo,eyeMat);eyeR.position.set(.07,bodyH+.38,-.15);g.add(eyeR);
-// Banker tie
-if(type==='banker'){const tie=new THREE.Mesh(new THREE.BoxGeometry(.06,.4,.02),new THREE.MeshStandardMaterial({color:0xcc2222}));tie.position.set(0,.7,-.16);g.add(tie)}
-// Shitcoiner glow
-if(type==='shitcoiner'){const glow=new THREE.PointLight(0x9932cc,.5,3);glow.position.y=.8;g.add(glow)}
-// Fed suit darkness
-if(type==='fed'){const suit=new THREE.Mesh(new THREE.BoxGeometry(bodyW-.05,bodyH-.1,.25),new THREE.MeshStandardMaterial({color:0x111122}));suit.position.y=bodyH/2+.2;suit.position.z=.01;g.add(suit)}
+const bodyH=type==='fed'?1.4:type==='adam'?1.2:1.1;
+const bodyW=type==='fed'?.5:type==='adam'?.5:.4;
+const skinColor=new THREE.Color(et.color).multiplyScalar(1.3);
+const clothColor=new THREE.Color(et.color);
+const darkColor=new THREE.Color(et.color).multiplyScalar(.6);
+const clothMat=new THREE.MeshStandardMaterial({color:clothColor,roughness:.7,metalness:.15});
+const skinMat=new THREE.MeshStandardMaterial({color:skinColor,roughness:.6,metalness:.1});
+const darkMat=new THREE.MeshStandardMaterial({color:darkColor,roughness:.8,metalness:.1});
+const shoeMat=new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:.8,metalness:.2});
+// HEAD (high poly sphere + facial features)
+const headG=new THREE.Group();
+const skull=new THREE.Mesh(new THREE.SphereGeometry(.16,24,24),skinMat);headG.add(skull);
+// Nose
+const nose=new THREE.Mesh(new THREE.ConeGeometry(.03,.06,12),skinMat);
+nose.rotation.x=-Math.PI/2;nose.position.set(0,-.02,-.15);headG.add(nose);
+// Eyes
+const eyeWhite=new THREE.MeshStandardMaterial({color:0xeeeeee,roughness:.3});
+const eyeIris=new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xff0000,emissiveIntensity:.6,roughness:.2});
+const eyeGeoW=new THREE.SphereGeometry(.032,16,16);
+const eyeGeoI=new THREE.SphereGeometry(.018,12,12);
+const eyeL=new THREE.Mesh(eyeGeoW,eyeWhite);eyeL.position.set(-.055,.02,-.13);headG.add(eyeL);
+const eyeR=new THREE.Mesh(eyeGeoW,eyeWhite);eyeR.position.set(.055,.02,-.13);headG.add(eyeR);
+const irisL=new THREE.Mesh(eyeGeoI,eyeIris);irisL.position.set(-.055,.02,-.155);headG.add(irisL);
+const irisR=new THREE.Mesh(eyeGeoI,eyeIris);irisR.position.set(.055,.02,-.155);headG.add(irisR);
+// Mouth
+const mouth=new THREE.Mesh(new THREE.BoxGeometry(.06,.015,.01),new THREE.MeshStandardMaterial({color:0x330000}));
+mouth.position.set(0,-.07,-.14);headG.add(mouth);
+// Ears
+const earGeo=new THREE.SphereGeometry(.04,12,12);earGeo.scale(1,.8,.4);
+const earL=new THREE.Mesh(earGeo,skinMat);earL.position.set(-.16,0,0);headG.add(earL);
+const earR=new THREE.Mesh(earGeo,skinMat);earR.position.set(.16,0,0);headG.add(earR);
+headG.position.y=bodyH+.3;g.add(headG);
+// NECK
+const neck=new THREE.Mesh(new THREE.CylinderGeometry(.06,.08,.12,16),skinMat);
+neck.position.y=bodyH+.12;g.add(neck);
+// TORSO (upper + lower, shaped)
+const torsoUpper=new THREE.Mesh(new THREE.CylinderGeometry(bodyW*.4,bodyW*.45,.45,16),clothMat);
+torsoUpper.position.y=bodyH*.65;g.add(torsoUpper);
+const torsoLower=new THREE.Mesh(new THREE.CylinderGeometry(bodyW*.35,bodyW*.3,.35,16),clothMat);
+torsoLower.position.y=bodyH*.35;g.add(torsoLower);
+// SHOULDERS
+const shoulderGeo=new THREE.SphereGeometry(.1,16,16);
+const shouldL=new THREE.Mesh(shoulderGeo,clothMat);shouldL.position.set(-(bodyW*.45+.05),bodyH*.78,0);g.add(shouldL);
+const shouldR=new THREE.Mesh(shoulderGeo,clothMat);shouldR.position.set(bodyW*.45+.05,bodyH*.78,0);g.add(shouldR);
+// UPPER ARMS
+const uArmGeo=new THREE.CylinderGeometry(.055,.05,.3,14);
+const uArmL=new THREE.Mesh(uArmGeo,clothMat);uArmL.position.set(-(bodyW*.5+.08),bodyH*.6,0);uArmL.rotation.z=.2;g.add(uArmL);
+const uArmR=new THREE.Mesh(uArmGeo,clothMat);uArmR.position.set(bodyW*.5+.08,bodyH*.6,0);uArmR.rotation.z=-.2;g.add(uArmR);
+// ELBOWS
+const elbowGeo=new THREE.SphereGeometry(.05,12,12);
+const elbL=new THREE.Mesh(elbowGeo,clothMat);elbL.position.set(-(bodyW*.55+.1),bodyH*.42,0);g.add(elbL);
+const elbR=new THREE.Mesh(elbowGeo,clothMat);elbR.position.set(bodyW*.55+.1,bodyH*.42,0);g.add(elbR);
+// FOREARMS
+const fArmGeo=new THREE.CylinderGeometry(.045,.04,.28,14);
+const fArmL=new THREE.Mesh(fArmGeo,skinMat);fArmL.position.set(-(bodyW*.55+.1),bodyH*.25,0);g.add(fArmL);
+const fArmR=new THREE.Mesh(fArmGeo,skinMat);fArmR.position.set(bodyW*.55+.1,bodyH*.25,0);g.add(fArmR);
+// HANDS
+const handGeo=new THREE.SphereGeometry(.04,12,12);
+const handL=new THREE.Mesh(handGeo,skinMat);handL.position.set(-(bodyW*.55+.1),bodyH*.1,0);g.add(handL);
+const handR=new THREE.Mesh(handGeo,skinMat);handR.position.set(bodyW*.55+.1,bodyH*.1,0);g.add(handR);
+// BELT
+const belt=new THREE.Mesh(new THREE.CylinderGeometry(bodyW*.32,bodyW*.32,.04,16),darkMat);
+belt.position.y=bodyH*.22;g.add(belt);
+// UPPER LEGS
+const uLegGeo=new THREE.CylinderGeometry(.065,.055,.35,14);
+const uLegL=new THREE.Mesh(uLegGeo,darkMat);uLegL.position.set(-.09,bodyH*.05,0);g.add(uLegL);
+const uLegR=new THREE.Mesh(uLegGeo,darkMat);uLegR.position.set(.09,bodyH*.05,0);g.add(uLegR);
+// KNEES
+const kneeGeo=new THREE.SphereGeometry(.055,12,12);
+const kneeL=new THREE.Mesh(kneeGeo,darkMat);kneeL.position.set(-.09,bodyH*-.1,0);g.add(kneeL);
+const kneeR=new THREE.Mesh(kneeGeo,darkMat);kneeR.position.set(.09,bodyH*-.1,0);g.add(kneeR);
+// LOWER LEGS
+const lLegGeo=new THREE.CylinderGeometry(.05,.045,.35,14);
+const lLegL=new THREE.Mesh(lLegGeo,darkMat);lLegL.position.set(-.09,bodyH*-.28,0);g.add(lLegL);
+const lLegR=new THREE.Mesh(lLegGeo,darkMat);lLegR.position.set(.09,bodyH*-.28,0);g.add(lLegR);
+// FEET/SHOES
+const shoeGeo=new THREE.BoxGeometry(.08,.05,.14);
+const shoeL=new THREE.Mesh(shoeGeo,shoeMat);shoeL.position.set(-.09,bodyH*-.47,-.02);g.add(shoeL);
+const shoeR=new THREE.Mesh(shoeGeo,shoeMat);shoeR.position.set(.09,bodyH*-.47,-.02);g.add(shoeR);
+// TYPE-SPECIFIC FEATURES
+if(type==='banker'){
+const tie=new THREE.Mesh(new THREE.BoxGeometry(.04,.35,.015),new THREE.MeshStandardMaterial({color:0xcc2222}));
+tie.position.set(0,bodyH*.55,-(bodyW*.35));g.add(tie);
+const collar=new THREE.Mesh(new THREE.BoxGeometry(.15,.04,.015),new THREE.MeshStandardMaterial({color:0xeeeeee}));
+collar.position.set(0,bodyH*.82,-(bodyW*.3));g.add(collar)}
+if(type==='shitcoiner'){
+const glow=new THREE.PointLight(0x9932cc,.6,3);glow.position.y=bodyH*.5;g.add(glow);
+const chain=new THREE.Mesh(new THREE.TorusGeometry(.08,.01,8,24),new THREE.MeshStandardMaterial({color:0xffaa00,metalness:.9,roughness:.2}));
+chain.position.set(0,bodyH*.75,-(bodyW*.3));g.add(chain)}
+if(type==='roger'){
+const hair=new THREE.Mesh(new THREE.SphereGeometry(.17,20,20,0,Math.PI*2,0,Math.PI*.45),new THREE.MeshStandardMaterial({color:0x1a1a1a}));
+hair.position.y=bodyH+.42;g.add(hair);
+const bch=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.008,24),new THREE.MeshStandardMaterial({color:0x8dc351,emissive:0x8dc351,emissiveIntensity:.3}));
+bch.position.set(0,bodyH*.55,-(bodyW*.36));g.add(bch)}
+if(type==='adam'){
+const glassGeo=new THREE.TorusGeometry(.04,.008,10,20);const glassMat=new THREE.MeshStandardMaterial({color:0x222222,metalness:.6,roughness:.3});
+const lL=new THREE.Mesh(glassGeo,glassMat);lL.position.set(-.055,bodyH+.34,-.16);g.add(lL);
+const lR=lL.clone();lR.position.x=.055;g.add(lR);
+const br=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,.06,8),glassMat);br.rotation.z=Math.PI/2;br.position.set(0,bodyH+.34,-.16);g.add(br);
+const armor=new THREE.Mesh(new THREE.BoxGeometry(bodyW*.7,.25,.04),new THREE.MeshStandardMaterial({color:0x88aadd,metalness:.7,roughness:.3}));
+armor.position.set(0,bodyH*.55,-(bodyW*.36));g.add(armor)}
+if(type==='fed'){
+const hat=new THREE.Mesh(new THREE.CylinderGeometry(.18,.16,.08,20),new THREE.MeshStandardMaterial({color:0x111122}));
+hat.position.y=bodyH+.5;g.add(hat);
+const brim=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.015,20),new THREE.MeshStandardMaterial({color:0x111122}));
+brim.position.y=bodyH+.47;g.add(brim);
+const suit=new THREE.Mesh(new THREE.CylinderGeometry(bodyW*.42,bodyW*.43,.46,16),new THREE.MeshStandardMaterial({color:0x0a0a1a}));
+suit.position.y=bodyH*.65;suit.position.z=.005;g.add(suit)}
+// All enemies cast shadows
+g.traverse(function(c){if(c.isMesh){c.castShadow=true;c.receiveShadow=true}});
 return g}
-
 function spawnEnemies(n){
 enemies.forEach(e=>{if(e.mesh)scene.remove(e.mesh)});enemies=[];
 for(let i=0;i<n;i++){let x,z;do{x=Math.floor(Math.random()*(MW-2))+1+.5;z=Math.floor(Math.random()*(MH-2))+1+.5}while(map[Math.floor(z)*MW+Math.floor(x)]!==0||Math.hypot(x-player.x,z-player.z)<5);
