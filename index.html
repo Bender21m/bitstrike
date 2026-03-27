@@ -84,6 +84,7 @@ canvas{display:block}
 <div class="enemy-card"><div class="icon">👔</div><div class="ename">FED CHAIRMAN</div><div class="edesc">BOSS — Money printer go brrr</div></div>
 </div>
 <div class="controls" id="ctrl-text">WASD — Move | Mouse — Look | Click — Shoot | R — Reload<br>1/2/3 — Weapons | Shift — Sprint | 🔊 Sound on</div>
+<div id="map-select" style="margin-bottom:20px;max-height:200px;overflow-y:auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 20px"></div>
 <div class="start-btn" id="start-btn">[ CLICK TO HODL ]</div>
 </div>
 
@@ -676,6 +677,22 @@ ceil.material.color.setHex(m.ceil);
 player.x=2.5;player.z=2.5;player.angle=0;player.pitch=0;
 document.getElementById('round-info').textContent=m.name+' | ROUND '+round+' | W:'+roundWins;
 }
+
+// Populate map selector
+const mapSelectEl=document.getElementById('map-select');
+if(mapSelectEl){MAPS.forEach((m,i)=>{
+const btn=document.createElement('div');
+btn.textContent=m.name;
+btn.style.cssText='cursor:pointer;padding:6px 12px;border-radius:6px;font-size:11px;border:1px solid #f7931a44;background:rgba(247,147,26,.08);color:#f7931a;pointer-events:auto;min-width:80px;text-align:center';
+btn.dataset.idx=i;
+if(i===0)btn.style.background='rgba(247,147,26,.3)';
+btn.addEventListener('click',()=>{
+currentMap=i;
+document.querySelectorAll('#map-select div').forEach(d=>d.style.background='rgba(247,147,26,.08)');
+btn.style.background='rgba(247,147,26,.3)';
+});
+mapSelectEl.appendChild(btn);
+})}
 
 function animate(){const dt=Math.min(clock.getDelta(),.05);
 update(dt);
