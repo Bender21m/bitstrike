@@ -392,10 +392,12 @@ const bfR=bfL.clone();bfR.position.x=.015;g.add(bfR);
 const slStud=new THREE.Mesh(new THREE.CylinderGeometry(.003,.003,.01,6),steel);slStud.rotation.z=Math.PI/2;slStud.position.set(-.025,-.02,.05);g.add(slStud);
 // Bitcoin on stock
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.02,.02),btcMat);btc.position.set(.019,-.005,.15);g.add(btc);
-g.position.set(.28,-.24,-.4);g.rotation.set(0,.05,0)}
+g.scale.set(1.5,1.5,1.5);g.position.set(.15,-.1,-.3);g.rotation.set(0,.08,0)}
 return g}
 
 let gunModels=[createGunModel(0),createGunModel(1),createGunModel(2)];
+// Make weapons immune to fog
+gunModels.forEach(g=>{g.traverse(child=>{if(child.isMesh){child.material=child.material.clone();child.material.fog=false;child.renderOrder=999}})});
 let activeGun=gunModels[0];camera.add(activeGun);
 function switchWeapon(idx){camera.remove(activeGun);curWeapon=idx;activeGun=gunModels[idx];camera.add(activeGun);reloading=false;updWB()}
 
@@ -588,7 +590,7 @@ if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'
 if(enemies.every(e=>e.health<=0)){round++;const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
-const gunBaseYs=[-.12,-.13,-.12];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*3-activeGun.position.y)*.15;
+const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*2-activeGun.position.y)*.15;
 activeGun.rotation.x=recoilPitch*3;
 // HUD
 document.getElementById('health').textContent=Math.max(0,player.health);
