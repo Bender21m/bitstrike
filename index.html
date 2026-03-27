@@ -546,10 +546,10 @@ const nx=player.x+mx,nz=player.z+mz;
 if(map[Math.floor(player.z)*MW+Math.floor(nx+Math.sign(mx)*margin)]===0)player.x=nx;
 if(map[Math.floor(nz+Math.sign(mz)*margin)*MW+Math.floor(player.x)]===0)player.z=nz;
 // Bob
-if(Math.abs(mx)+Math.abs(mz)>.001){bobPhase+=dt*8;bobAmt=Math.min(bobAmt+dt*20,.08)}else bobAmt*=.9;
+if(Math.abs(mx)+Math.abs(mz)>.001){bobPhase+=dt*5;bobAmt=Math.min(bobAmt+dt*8,.03)}else bobAmt*=.85;
 // Camera
 recoilPitch*=.85;screenShake*=.85;
-camera.position.set(player.x,.8+Math.sin(bobPhase)*bobAmt,player.z);
+camera.position.set(player.x,.8+Math.sin(bobPhase)*bobAmt*.4,player.z);
 camera.rotation.order='YXZ';
 camera.rotation.y=player.angle;
 camera.rotation.x=player.pitch+recoilPitch+(Math.random()-.5)*screenShake*.01;
@@ -590,7 +590,7 @@ if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'
 if(enemies.every(e=>e.health<=0)){round++;const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
-const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*2-activeGun.position.y)*.15;
+const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-activeGun.position.y)*.08;
 activeGun.rotation.x=recoilPitch*3;
 // HUD
 document.getElementById('health').textContent=Math.max(0,player.health);
