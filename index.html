@@ -72,20 +72,7 @@ canvas{display:block}
 <div class="weapon-btn" data-w="2">SAB</div>
 </div>
 </div>
-<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace;pointer-events:auto">
-<h2 style="font-size:28px;margin-bottom:5px;text-shadow:0 0 15px rgba(247,147,26,.5)">₿UY MENU</h2>
-<div style="font-size:12px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div>
-<div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px">
-<div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">AK-₿7</div><div style="font-size:11px;color:#888">Full auto rifle</div><div style="font-size:14px;color:#f7931a;margin-top:4px">2,700 sats</div></div>
-<div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">₿EAGLE</div><div style="font-size:11px;color:#888">Heavy pistol</div><div style="font-size:14px;color:#f7931a;margin-top:4px">700 sats</div></div>
-<div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">SA₿OT</div><div style="font-size:11px;color:#888">Sniper rifle</div><div style="font-size:14px;color:#f7931a;margin-top:4px">4,750 sats</div></div>
-</div>
-<div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px">
-<div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">ARMOR</div><div style="font-size:11px;color:#888">50% damage reduction</div><div style="font-size:14px;color:#4a4;margin-top:4px">1,000 sats</div></div>
-<div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">HELMET</div><div style="font-size:11px;color:#888">Headshot protection</div><div style="font-size:14px;color:#4a4;margin-top:4px">350 sats</div></div>
-</div>
-<div style="font-size:12px;color:#666">Click to buy | Press B to close | Pistol is free</div>
-</div>
+
 <div id="start-screen">
 <h1>₿ITSTRIKE</h1>
 <div class="sub">Stack Sats. Shoot Fiat.</div>
@@ -688,5 +675,19 @@ renderer.autoClear=true;renderer.render(scene,camera);
 requestAnimationFrame(animate)}
 animate();
 </script>
+<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace;pointer-events:auto">
+<h2 style="font-size:28px;margin-bottom:5px;text-shadow:0 0 15px rgba(247,147,26,.5)">₿UY MENU</h2>
+<div style="font-size:12px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div>
+<div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px">
+<div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">AK-₿7</div><div style="font-size:11px;color:#888">Full auto rifle</div><div style="font-size:14px;color:#f7931a;margin-top:4px">2,700 sats</div></div>
+<div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">₿EAGLE</div><div style="font-size:11px;color:#888">Heavy pistol</div><div style="font-size:14px;color:#f7931a;margin-top:4px">700 sats</div></div>
+<div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">SA₿OT</div><div style="font-size:11px;color:#888">Sniper rifle</div><div style="font-size:14px;color:#f7931a;margin-top:4px">4,750 sats</div></div>
+</div>
+<div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px">
+<div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">ARMOR</div><div style="font-size:11px;color:#888">50% damage reduction</div><div style="font-size:14px;color:#4a4;margin-top:4px">1,000 sats</div></div>
+<div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">HELMET</div><div style="font-size:11px;color:#888">Headshot protection</div><div style="font-size:14px;color:#4a4;margin-top:4px">350 sats</div></div>
+</div>
+<div style="font-size:12px;color:#666">Click to buy | Press B to close | Pistol is free</div>
+</div>
 </body>
 </html>
