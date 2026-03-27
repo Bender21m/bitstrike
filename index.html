@@ -481,6 +481,18 @@ const eyeGeo=new THREE.SphereGeometry(.04,12,12);const eyeMat=new THREE.MeshStan
 const eyeL=new THREE.Mesh(eyeGeo,eyeMat);eyeL.position.set(-.07,bodyH+.38,-.15);g.add(eyeL);
 const eyeR=new THREE.Mesh(eyeGeo,eyeMat);eyeR.position.set(.07,bodyH+.38,-.15);g.add(eyeR);
 // Banker tie
+if(type==='roger'){
+const hair=new THREE.Mesh(new THREE.SphereGeometry(.19,16,16,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:.6}));
+hair.position.y=bodyH+.45;g.add(hair);
+const bch=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.01,20),new THREE.MeshStandardMaterial({color:0x8dc351,emissive:0x8dc351,emissiveIntensity:.3}));
+bch.position.set(0,bodyH*.5,-.16);g.add(bch)}
+if(type==='adam'){
+const glassGeo=new THREE.TorusGeometry(.05,.008,8,16);const glassMat=new THREE.MeshStandardMaterial({color:0x222222,roughness:.3,metalness:.6});
+const lensL=new THREE.Mesh(glassGeo,glassMat);lensL.position.set(-.08,bodyH+.38,-.18);g.add(lensL);
+const lensR=lensL.clone();lensR.position.x=.08;g.add(lensR);
+const bridge=new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,.08,8),glassMat);bridge.rotation.z=Math.PI/2;bridge.position.set(0,bodyH+.38,-.18);g.add(bridge);
+const armor=new THREE.Mesh(new THREE.BoxGeometry(bodyW*.8,.3,.05),new THREE.MeshStandardMaterial({color:0x88aadd,roughness:.3,metalness:.7}));
+armor.position.set(0,bodyH*.5,-.17);g.add(armor)}
 if(type==='banker'){const tie=new THREE.Mesh(new THREE.BoxGeometry(.06,.4,.02),new THREE.MeshStandardMaterial({color:0xcc2222}));tie.position.set(0,.7,-.16);g.add(tie)}
 // Shitcoiner glow
 if(type==='shitcoiner'){const glow=new THREE.PointLight(0x9932cc,.5,3);glow.position.y=.8;g.add(glow)}
@@ -565,11 +577,11 @@ const hit=shootRay();
 /* wallbang disabled */
 if(hit){hit.health-=w.damage;hit.hit=10;playSound('hit');
 // Flash enemy red
-hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0xff0000)});
-setTimeout(()=>{hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0x000000)})},100);
+if(hit.mesh)hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0xff0000)});
+setTimeout(()=>{if(hit.mesh)hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0x000000)})},100);
 if(hit.health<=0){player.kills++;const et=ENEMY_TYPES[hit.type];player.sats+=et.reward;
 addKill(et.deathMsgs[Math.floor(Math.random()*et.deathMsgs.length)]+' — '+et.name+' +'+et.reward+' sats');
-playSound('kill');scene.remove(hit.mesh)}}
+playSound('kill');if(hit.mesh)scene.remove(hit.mesh)}}
 if(w.ammo<=0&&w.reserve>0)startReload()}
 
 function addKill(t){killFeed.unshift({text:t,time:Date.now()});if(killFeed.length>6)killFeed.pop()}
