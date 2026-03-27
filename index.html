@@ -57,7 +57,7 @@ canvas{display:block}
 <div class="stat"><div class="label">₿ SATS</div><div class="value" id="sats">0</div></div>
 <div class="stat"><div class="label">WEAPON</div><div class="value" id="weapon">AK-₿7</div></div>
 <div class="stat"><div class="label">AMMO</div><div class="value" id="ammo">30/90</div></div>
-<div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
+<div class="stat"><div class="label">ARMOR</div><div class="value" id="armor">0</div></div><div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
 </div>
 <div id="message"></div>
 <div id="kill-feed"></div>
@@ -72,7 +72,7 @@ canvas{display:block}
 <div class="weapon-btn" data-w="2">SAB</div>
 </div>
 </div>
-
+<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:12px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">AK-₿7</div><div style="font-size:11px;color:#888">Full auto</div><div style="font-size:14px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">₿EAGLE</div><div style="font-size:11px;color:#888">Pistol</div><div style="font-size:14px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">SA₿OT</div><div style="font-size:11px;color:#888">Sniper</div><div style="font-size:14px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:16px;font-weight:bold">ARMOR</div><div style="font-size:14px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:16px;font-weight:bold">HELMET</div><div style="font-size:14px;color:#4a4">350 sats</div></div></div><div style="font-size:11px;color:#666">Press B to close</div></div>
 <div id="start-screen">
 <h1>₿ITSTRIKE</h1>
 <div class="sub">Stack Sats. Shoot Fiat.</div>
@@ -142,7 +142,7 @@ dirLight.shadow.camera.left=-20;dirLight.shadow.camera.right=20;dirLight.shadow.
 scene.add(dirLight);
 
 // Point lights for atmosphere
-const btcLight=new THREE.PointLight(0xf7931a,.5,15);btcLight.position.set(12,3,20);scene.add(btcLight);
+const btcLight=new THREE.PointLight(0xf7931a,.5,15);btcLight.position.set(12,3,12);scene.add(btcLight);
 const btcLight2=new THREE.PointLight(0xf7931a,.3,10);btcLight2.position.set(5,3,18);scene.add(btcLight2);
 
 // Player flashlight
@@ -153,7 +153,7 @@ camera.add(flashlight.target);scene.add(camera);
 
 // ===== MAP =====
 const MW=24,MH=24;
-const map=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+const map=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
 // Textures
 function makeWallTex(){const c=document.createElement('canvas');c.width=64;c.height=64;const x=c.getContext('2d');
@@ -203,11 +203,10 @@ const wall=new THREE.Mesh(wallGeo,wallMat);wall.position.set(x+.5,1,y+.5);wall.c
 scene.add(wallGroup);
 
 // ===== PLAYER =====
-const player={x:2.5,z:2.5,angle:0,pitch:0,health:100,sats:16000,kills:0,armor:0,helmet:false,team:"bitcoiner"};
+const player={x:2.5,z:2.5,angle:0,pitch:0,health:100,sats:16000,kills:0,armor:0,helmet:false};
 let bobPhase=0,bobAmt=0,screenShake=0;
-let buyPhase=false,buyTimer=0,roundActive=false,roundWins=0,roundLosses=0;
-const WEAPON_PRICES={ak:2700,deagle:700,awp:4750,armor:1000,helmet:350};
-const BUY_TIME=10;
+let buyPhase=false,buyTimer=0,roundWins=0;
+const WEAPON_PRICES={ak:2700,deagle:700,awp:4750,armor:1000,helmet:350};const BUY_TIME=10;
 
 // ===== WEAPONS =====
 const weapons=[
@@ -243,11 +242,11 @@ const topCvr=new THREE.Mesh(new THREE.BoxGeometry(.038,.01,.18),steel);topCvr.po
 // Dust cover ridges
 for(let i=0;i<6;i++){const ridge=new THREE.Mesh(new THREE.BoxGeometry(.04,.003,.005),steel);ridge.position.set(0,.035,-.18+i*.035);g.add(ridge)}
 // Barrel (tapered)
-const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.006,.008,.38,20),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.42);g.add(barrel);
+const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.006,.008,.38,12),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.42);g.add(barrel);
 // Barrel pin
 const pin=new THREE.Mesh(new THREE.CylinderGeometry(.009,.009,.02,8),steel);pin.rotation.x=Math.PI/2;pin.position.set(0,.012,-.21);g.add(pin);
 // Muzzle brake (slotted)
-const muzzle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.01,.04,20),darkSteel);muzzle.rotation.x=Math.PI/2;muzzle.position.set(0,.012,-.62);g.add(muzzle);
+const muzzle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.01,.04,8),darkSteel);muzzle.rotation.x=Math.PI/2;muzzle.position.set(0,.012,-.62);g.add(muzzle);
 for(let i=0;i<4;i++){const slot=new THREE.Mesh(new THREE.BoxGeometry(.025,.004,.006),new THREE.MeshStandardMaterial({color:0x000000}));slot.position.set(0,.012,-.6+i*.008);g.add(slot)}
 // Gas tube
 const gasTube=new THREE.Mesh(new THREE.CylinderGeometry(.007,.007,.2,8),darkSteel);gasTube.rotation.x=Math.PI/2;gasTube.position.set(0,.04,-.32);g.add(gasTube);
@@ -262,7 +261,7 @@ const magGeo=new THREE.BoxGeometry(.028,.13,.018);const mag=new THREE.Mesh(magGe
 // Mag ridges
 for(let i=0;i<4;i++){const mr=new THREE.Mesh(new THREE.BoxGeometry(.03,.003,.02),new THREE.MeshStandardMaterial({color:0x3a2a1a}));mr.position.set(0,-.04-i*.025,-.07);mr.rotation.x=.18;g.add(mr)}
 // Trigger guard
-const tgOuter=new THREE.Mesh(new THREE.TorusGeometry(.012,.002,12,16,Math.PI),steel);tgOuter.rotation.y=Math.PI/2;tgOuter.position.set(0,-.03,-.03);g.add(tgOuter);
+const tgOuter=new THREE.Mesh(new THREE.TorusGeometry(.012,.002,6,8,Math.PI),steel);tgOuter.rotation.y=Math.PI/2;tgOuter.position.set(0,-.03,-.03);g.add(tgOuter);
 // Trigger
 const trigger=new THREE.Mesh(new THREE.BoxGeometry(.003,.015,.008),steel);trigger.position.set(0,-.025,-.03);trigger.rotation.x=-.2;g.add(trigger);
 // Pistol grip
@@ -288,7 +287,7 @@ const ch=new THREE.Mesh(new THREE.BoxGeometry(.008,.008,.015),steel);ch.position
 // Bitcoin emblem on receiver
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.022,.022),btcMat);btc.position.set(.022,.005,-.06);g.add(btc);
 // Sling mount
-const sling=new THREE.Mesh(new THREE.TorusGeometry(.006,.0015,12,16,Math.PI),steel);sling.position.set(0,-.025,.17);sling.rotation.x=Math.PI/2;g.add(sling);
+const sling=new THREE.Mesh(new THREE.TorusGeometry(.006,.0015,4,6,Math.PI),steel);sling.position.set(0,-.025,.17);sling.rotation.x=Math.PI/2;g.add(sling);
 g.scale.set(4,4,4);g.position.set(.15,-.12,-.35);g.rotation.set(0,.08,0);
 }else if(type===1){
 // ===== DESERT EAGLE =====
@@ -297,7 +296,7 @@ const slide=new THREE.Mesh(new THREE.BoxGeometry(.038,.042,.2),chrome);slide.pos
 // Slide serrations (rear)
 for(let i=0;i<8;i++){const ser=new THREE.Mesh(new THREE.BoxGeometry(.04,.002,.003),new THREE.MeshStandardMaterial({color:0x999999,roughness:.1,metalness:.95}));ser.position.set(0,.015,-.01+i*.006);g.add(ser)}
 // Barrel (thick, heavy)
-const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.24,20),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.02,-.28);g.add(barrel);
+const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.24,12),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.02,-.28);g.add(barrel);
 // Barrel lug
 const lug=new THREE.Mesh(new THREE.BoxGeometry(.042,.035,.06),chrome);lug.position.set(0,.01,-.22);g.add(lug);
 // Muzzle
@@ -321,14 +320,14 @@ const mag=new THREE.Mesh(new THREE.BoxGeometry(.022,.06,.024),steel);mag.positio
 // Mag base plate
 const mbp=new THREE.Mesh(new THREE.BoxGeometry(.024,.005,.026),darkSteel);mbp.position.set(0,-.095,-.005);mbp.rotation.x=-.18;g.add(mbp);
 // Front sight (red fiber optic)
-const fSight=new THREE.Mesh(new THREE.SphereGeometry(.003,12,20),redDot);fSight.position.set(0,.04,-.28);g.add(fSight);
+const fSight=new THREE.Mesh(new THREE.SphereGeometry(.003,6,6),redDot);fSight.position.set(0,.04,-.28);g.add(fSight);
 // Rear sight (notch)
 const rsL=new THREE.Mesh(new THREE.BoxGeometry(.005,.012,.005),darkSteel);rsL.position.set(-.008,.04,-.01);g.add(rsL);
 const rsR=rsL.clone();rsR.position.x=.008;g.add(rsR);
 // Hammer
 const hammer=new THREE.Mesh(new THREE.BoxGeometry(.005,.015,.008),steel);hammer.position.set(0,.02,.02);hammer.rotation.x=-.3;g.add(hammer);
 // Safety
-const safety=new THREE.Mesh(new THREE.CylinderGeometry(.004,.004,.005,16),steel);safety.rotation.z=Math.PI/2;safety.position.set(.02,.005,-.02);g.add(safety);
+const safety=new THREE.Mesh(new THREE.CylinderGeometry(.004,.004,.005,6),steel);safety.rotation.z=Math.PI/2;safety.position.set(.02,.005,-.02);g.add(safety);
 // Slide stop
 const ss=new THREE.Mesh(new THREE.BoxGeometry(.003,.008,.012),steel);ss.position.set(.018,-.005,-.05);g.add(ss);
 // Bitcoin emblem
@@ -341,34 +340,34 @@ g.scale.set(4,4,4);g.position.set(.1,-.13,-.3);g.rotation.set(0,.05,0);
 // Receiver (long action)
 const recv=new THREE.Mesh(new THREE.BoxGeometry(.042,.05,.32),steel);recv.position.set(0,0,-.16);g.add(recv);
 // Barrel (long, heavy profile)
-const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.01,.55,20),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.58);g.add(barrel);
+const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.008,.01,.55,12),darkSteel);barrel.rotation.x=Math.PI/2;barrel.position.set(0,.012,-.58);g.add(barrel);
 // Free-float handguard
 const hg=new THREE.Mesh(new THREE.BoxGeometry(.04,.04,.2),blackPoly);hg.position.set(0,.0,-.4);g.add(hg);
 // Handguard rails (picatinny)
 for(let i=0;i<12;i++){const rail=new THREE.Mesh(new THREE.BoxGeometry(.044,.003,.008),blackPoly);rail.position.set(0,.022,-.32-i*.015);g.add(rail)}
 // Muzzle brake
-const muz=new THREE.Mesh(new THREE.CylinderGeometry(.016,.014,.06,20),darkSteel);muz.rotation.x=Math.PI/2;muz.position.set(0,.012,-.86);g.add(muz);
+const muz=new THREE.Mesh(new THREE.CylinderGeometry(.016,.014,.06,8),darkSteel);muz.rotation.x=Math.PI/2;muz.position.set(0,.012,-.86);g.add(muz);
 // Muzzle brake ports
 for(let i=0;i<3;i++){const port=new THREE.Mesh(new THREE.BoxGeometry(.035,.005,.005),new THREE.MeshStandardMaterial({color:0x000000}));port.position.set(0,.012,-.84+i*.015);g.add(port)}
 // Scope mount rings
-const ring1=new THREE.Mesh(new THREE.TorusGeometry(.022,.004,16,24),darkSteel);ring1.position.set(0,.05,-.12);g.add(ring1);
+const ring1=new THREE.Mesh(new THREE.TorusGeometry(.022,.004,8,12),darkSteel);ring1.position.set(0,.05,-.12);g.add(ring1);
 const ring2=ring1.clone();ring2.position.z=-.25;g.add(ring2);
 // Scope body
-const scopeMain=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.22,24),darkSteel);scopeMain.rotation.x=Math.PI/2;scopeMain.position.set(0,.07,-.18);g.add(scopeMain);
+const scopeMain=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.22,12),darkSteel);scopeMain.rotation.x=Math.PI/2;scopeMain.position.set(0,.07,-.18);g.add(scopeMain);
 // Scope front bell (larger)
-const scopeFront=new THREE.Mesh(new THREE.CylinderGeometry(.025,.02,.04,20),darkSteel);scopeFront.rotation.x=Math.PI/2;scopeFront.position.set(0,.07,-.31);g.add(scopeFront);
+const scopeFront=new THREE.Mesh(new THREE.CylinderGeometry(.025,.02,.04,12),darkSteel);scopeFront.rotation.x=Math.PI/2;scopeFront.position.set(0,.07,-.31);g.add(scopeFront);
 // Front lens
-const fLens=new THREE.Mesh(new THREE.CircleGeometry(.024,24),scopeLens);fLens.position.set(0,.07,-.33);g.add(fLens);
+const fLens=new THREE.Mesh(new THREE.CircleGeometry(.024,12),scopeLens);fLens.position.set(0,.07,-.33);g.add(fLens);
 // Rear lens
-const rLens=new THREE.Mesh(new THREE.CircleGeometry(.019,24),scopeLens);rLens.position.set(0,.07,-.07);rLens.rotation.y=Math.PI;g.add(rLens);
+const rLens=new THREE.Mesh(new THREE.CircleGeometry(.019,12),scopeLens);rLens.position.set(0,.07,-.07);rLens.rotation.y=Math.PI;g.add(rLens);
 // Scope turrets (elevation/windage)
 const turretE=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.015,8),darkSteel);turretE.position.set(0,.095,-.2);g.add(turretE);
 const turretW=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.015,8),darkSteel);turretW.rotation.z=Math.PI/2;turretW.position.set(.028,.07,-.2);g.add(turretW);
 // Scope magnification ring
-const magRing=new THREE.Mesh(new THREE.TorusGeometry(.022,.003,12,24),steel);magRing.position.set(0,.07,-.08);g.add(magRing);
+const magRing=new THREE.Mesh(new THREE.TorusGeometry(.022,.003,6,12),steel);magRing.position.set(0,.07,-.08);g.add(magRing);
 // Bolt handle
-const boltBody=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,.05,16),chrome);boltBody.rotation.x=Math.PI/2;boltBody.position.set(.025,.02,-.05);g.add(boltBody);
-const boltKnob=new THREE.Mesh(new THREE.SphereGeometry(.008,16,16),chrome);boltKnob.position.set(.025,.02,-.02);g.add(boltKnob);
+const boltBody=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,.05,6),chrome);boltBody.rotation.x=Math.PI/2;boltBody.position.set(.025,.02,-.05);g.add(boltBody);
+const boltKnob=new THREE.Mesh(new THREE.SphereGeometry(.008,6,6),chrome);boltKnob.position.set(.025,.02,-.02);g.add(boltKnob);
 // Trigger guard
 const tg=new THREE.Mesh(new THREE.BoxGeometry(.035,.003,.04),steel);tg.position.set(0,-.03,-.02);g.add(tg);
 const tgF=new THREE.Mesh(new THREE.BoxGeometry(.035,.018,.003),steel);tgF.position.set(0,-.022,-.04);g.add(tgF);
@@ -387,7 +386,7 @@ const mag=new THREE.Mesh(new THREE.BoxGeometry(.025,.09,.028),steel);mag.positio
 // Mag base
 const magBase=new THREE.Mesh(new THREE.BoxGeometry(.027,.005,.03),darkSteel);magBase.position.set(0,-.128,-.1);g.add(magBase);
 // Bipod (folded)
-const bpL=new THREE.Mesh(new THREE.CylinderGeometry(.003,.003,.12,16),darkSteel);bpL.position.set(-.015,.0,-.48);bpL.rotation.x=.3;g.add(bpL);
+const bpL=new THREE.Mesh(new THREE.CylinderGeometry(.003,.003,.12,6),darkSteel);bpL.position.set(-.015,.0,-.48);bpL.rotation.x=.3;g.add(bpL);
 const bpR=bpL.clone();bpR.position.x=.015;g.add(bpR);
 // Bipod feet
 const bfL=new THREE.Mesh(new THREE.BoxGeometry(.008,.003,.015),rubber);bfL.position.set(-.015,-.04,-.42);g.add(bfL);
@@ -396,7 +395,7 @@ const bfR=bfL.clone();bfR.position.x=.015;g.add(bfR);
 const slStud=new THREE.Mesh(new THREE.CylinderGeometry(.003,.003,.01,6),steel);slStud.rotation.z=Math.PI/2;slStud.position.set(-.025,-.02,.05);g.add(slStud);
 // Bitcoin on stock
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.02,.02),btcMat);btc.position.set(.019,-.005,.15);g.add(btc);
-g.scale.set(1,1,1);g.position.set(.12,-.08,-.25);g.rotation.set(0,.08,0)}
+g.scale.set(1.5,1.5,1.5);g.position.set(.15,-.1,-.3);g.rotation.set(0,.08,0)}
 return g}
 
 let gunModels=[createGunModel(0),createGunModel(1),createGunModel(2)];
@@ -414,10 +413,7 @@ const ENEMY_TYPES={
 banker:{name:'EVIL BANKER',color:0x6a6a80,hp:60,speed:.018,damage:12,reward:5000,taunts:['Money printer go brrr!','You need a license!','CBDC when?','Inflation is transitory!'],deathMsgs:['Bank run!','Bailout denied','Fractional reserve THAT']},
 shitcoiner:{name:'SHITCOINER',color:0x9932cc,hp:40,speed:.025,damage:8,reward:3000,taunts:['ETH has smart contracts!','SOL is so fast!','Check my NFT!','Bitcoin is boomer tech!'],deathMsgs:['Rug pulled!','Exit scam complete','Back to zero']},
 bear:{name:'FUD BEAR',color:0xb44040,hp:50,speed:.02,damage:10,reward:4000,taunts:['Bitcoin is dead!','Tulip mania!','Going to zero!','Sell now!'],deathMsgs:['FUD destroyed!','Bear liquidated','Short squeezed']},
-roger:{name:'ROGER VER',color:0x00aa00,hp:45,speed:.028,damage:8,reward:6000,taunts:['Bitcoin Cash is the real Bitcoin!','BCH fees are lower!','Read the whitepaper!','I was the first Bitcoin investor!','Blockstream ruined Bitcoin!'],deathMsgs:['Bcash busted!','Ver-y dead','Fork off Roger!']},
-adam:{name:'ADAM BACK',color:0x4488cc,hp:120,speed:.012,damage:18,reward:8000,taunts:['Hashcash was first!','I invented proof of work!','Check my PGP key!','Have you read my CV?'],deathMsgs:['Hashcash crushed!','Back down!','OG defeated']},
-satoshi:{name:'SATOSHI',color:0x111111,hp:150,speed:.03,damage:15,reward:21000000,taunts:['...','If you dont believe me or dont understand, I dont have time to try to convince you.','Running Bitcoin.','Chancellor on brink of second bailout for banks.'],deathMsgs:['You found Satoshi!','The creator falls...','Was it really him?']},
-fed:{name:'FED CHAIRMAN',color:0x3a3a55,hp:200,speed:.012,damage:25,reward:21000,taunts:['Inflation is transitory!','We have the tools!','Not QE!','Trust the process!'],deathMsgs:['THE FED IS DEAD','Audit complete','End the Fed!']}};
+roger:{name:'ROGER VER',color:0x00aa00,hp:45,speed:.028,damage:8,reward:6000,taunts:['Bitcoin Cash is the real Bitcoin!','BCH fees are lower!','Read the whitepaper!','Blockstream ruined Bitcoin!'],deathMsgs:['Bcash busted!','Ver-y dead','Fork off Roger!']},adam:{name:'ADAM BACK',color:0x4488cc,hp:120,speed:.012,damage:18,reward:8000,taunts:['Hashcash was first!','I invented proof of work!','Check my PGP key!'],deathMsgs:['Hashcash crushed!','Back down!','OG defeated']},fed:{name:'FED CHAIRMAN',color:0x3a3a55,hp:200,speed:.012,damage:25,reward:21000,taunts:['Inflation is transitory!','We have the tools!','Not QE!','Trust the process!'],deathMsgs:['THE FED IS DEAD','Audit complete','End the Fed!']}};
 
 let enemies=[],pickups=[],killFeed=[],taunts=[];
 let round=1,started=false,gameOver=false;
@@ -426,35 +422,16 @@ function createEnemyMesh(type){
 const et=ENEMY_TYPES[type];const g=new THREE.Group();
 const bodyH=type==='fed'?1.4:1.1;const bodyW=type==='fed'?.5:.4;
 // Body
-const body=new THREE.Mesh(new THREE.CapsuleGeometry(bodyW*.45,bodyH*.5,8,16),new THREE.MeshStandardMaterial({color:et.color,roughness:.7,metalness:.2}));
+const body=new THREE.Mesh(new THREE.BoxGeometry(bodyW,bodyH,.3),new THREE.MeshStandardMaterial({color:et.color,roughness:.7,metalness:.2}));
 body.position.y=bodyH/2+.2;body.castShadow=true;g.add(body);
 // Head
-const head=new THREE.Mesh(new THREE.SphereGeometry(.18,20,20),new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(1.3),roughness:.6}));
+const head=new THREE.Mesh(new THREE.SphereGeometry(.18,8,8),new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(1.3),roughness:.6}));
 head.position.y=bodyH+.35;head.castShadow=true;g.add(head);
-// Arms
-const armGeo=new THREE.CapsuleGeometry(.08,.35,6,12);const armMat=new THREE.MeshStandardMaterial({color:new THREE.Color(et.color).multiplyScalar(.85),roughness:.7});
-const armL=new THREE.Mesh(armGeo,armMat);armL.position.set(-(bodyW*.5+.1),bodyH*.6,0);armL.rotation.z=.15;g.add(armL);
-const armR=armL.clone();armR.position.x=bodyW*.5+.1;armR.rotation.z=-.15;g.add(armR);
 // Eyes (evil red)
-const eyeGeo=new THREE.SphereGeometry(.04,12,20);const eyeMat=new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xff0000,emissiveIntensity:.8});
+const eyeGeo=new THREE.SphereGeometry(.04,4,4);const eyeMat=new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xff0000,emissiveIntensity:.8});
 const eyeL=new THREE.Mesh(eyeGeo,eyeMat);eyeL.position.set(-.07,bodyH+.38,-.15);g.add(eyeL);
 const eyeR=new THREE.Mesh(eyeGeo,eyeMat);eyeR.position.set(.07,bodyH+.38,-.15);g.add(eyeR);
 // Banker tie
-if(type==='roger'){// Roger Ver - green BCH suit, slicked hair
-const hair=new THREE.Mesh(new THREE.SphereGeometry(.19,16,16,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:.6}));hair.position.y=bodyH+.45;g.add(hair);
-const bch=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.01,20),new THREE.MeshStandardMaterial({color:0x8dc351,emissive:0x8dc351,emissiveIntensity:.3}));bch.position.set(0,bodyH*.5,-.16);g.add(bch);
-}
-if(type==='adam'){// Adam Back - blue suit, glasses, stocky
-const glasses=new THREE.Group();const lensGeo=new THREE.TorusGeometry(.05,.01,8,16);const lensMat=new THREE.MeshStandardMaterial({color:0x222222,roughness:.3,metalness:.5});
-const lensL=new THREE.Mesh(lensGeo,lensMat);lensL.position.set(-.08,bodyH+.38,-.18);glasses.add(lensL);
-const lensR=lensL.clone();lensR.position.x=.08;glasses.add(lensR);
-const bridge=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.08,8),lensMat);bridge.rotation.z=Math.PI/2;bridge.position.set(0,bodyH+.38,-.18);glasses.add(bridge);g.add(glasses);
-// Hashcash armor plate
-const armor=new THREE.Mesh(new THREE.BoxGeometry(bodyW*.8,.3,.05),new THREE.MeshStandardMaterial({color:0x88aadd,roughness:.3,metalness:.7}));armor.position.set(0,bodyH*.5,-.17);g.add(armor);
-}
-if(type==='satoshi'){// Predator cloak - make all meshes transparent
-g.traverse(child=>{if(child.isMesh){child.material=child.material.clone();child.material.transparent=true;child.material.opacity=0.08;child.material.emissive=new THREE.Color(0x00ffff);child.material.emissiveIntensity=0.15}});
-const cloak=new THREE.PointLight(0x00ffff,.15,2);cloak.position.y=.8;g.add(cloak)}
 if(type==='banker'){const tie=new THREE.Mesh(new THREE.BoxGeometry(.06,.4,.02),new THREE.MeshStandardMaterial({color:0xcc2222}));tie.position.set(0,.7,-.16);g.add(tie)}
 // Shitcoiner glow
 if(type==='shitcoiner'){const glow=new THREE.PointLight(0x9932cc,.5,3);glow.position.y=.8;g.add(glow)}
@@ -473,7 +450,7 @@ function spawnPickups(n){
 pickups.forEach(p=>{if(p.mesh)scene.remove(p.mesh)});
 for(let i=0;i<n;i++){let x,z;do{x=Math.floor(Math.random()*(MW-2))+1+.5;z=Math.floor(Math.random()*(MH-2))+1+.5}while(map[Math.floor(z)*MW+Math.floor(x)]!==0);
 const g=new THREE.Group();
-const coin=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.04,32),new THREE.MeshStandardMaterial({color:0xf7931a,roughness:.3,metalness:.8,emissive:0xf7931a,emissiveIntensity:.3}));
+const coin=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.04,16),new THREE.MeshStandardMaterial({color:0xf7931a,roughness:.3,metalness:.8,emissive:0xf7931a,emissiveIntensity:.3}));
 coin.rotation.x=Math.PI/2;g.add(coin);
 const light=new THREE.PointLight(0xf7931a,.4,3);g.add(light);
 g.position.set(x,.7,z);scene.add(g);
@@ -483,7 +460,7 @@ pickups.push({x,z,sats:Math.floor(Math.random()*5000)+1000,mesh:g,phase:Math.ran
 const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
 if(isMobile){document.body.classList.add('mobile');document.getElementById('ctrl-text').innerHTML='Left stick — Move | Right side — Look<br>FIRE — Shoot | R — Reload'}
 const keys={};let mouseDown=false;
-document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(e.key==='b'&&buyPhase){const bm=document.getElementById('buy-menu');bm.style.display=bm.style.display==='flex'?'none':'flex'}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
+document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(e.key==='b'&&buyPhase){const bm=document.getElementById('buy-menu');if(bm)bm.style.display=bm.style.display==='flex'?'none':'flex'}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
 document.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
 document.addEventListener('mousedown',()=>{if(!isMobile)mouseDown=true});
 document.addEventListener('mouseup',()=>{if(!isMobile){mouseDown=false;canShoot=true}});
@@ -530,20 +507,7 @@ muzzleFlash=3;muzzleLight.intensity=3;
 recoilPitch=w.recoilAmt;screenShake=w.recoilAmt*30;
 playSound(w.sndType);
 const hit=shootRay();
-// Wall penetration - check for enemies behind thin walls
-if(!hit){const dir2=new THREE.Vector3(0,0,-1);dir2.applyQuaternion(camera.quaternion);
-const ray2=new THREE.Raycaster(camera.position,dir2,0,50);
-const wallHits=ray2.intersectObjects(wallGroup.children,false);
-if(wallHits.length>=2&&wallHits[1].distance-wallHits[0].distance<1.5){
-// Thin wall - check for enemies beyond
-for(const e of enemies){if(e.health<=0)continue;
-const toE=new THREE.Vector3(e.x-camera.position.x,.6-camera.position.y,e.z-camera.position.z);
-const dot2=toE.dot(dir2);if(dot2>wallHits[1].distance&&dot2<wallHits[1].distance+10){
-const perp2=toE.clone().sub(dir2.clone().multiplyScalar(dot2)).length();
-if(perp2<.6){e.health-=w.damage*.4;e.hit=10;playSound('hit');
-if(e.health<=0){player.kills++;const et2=ENEMY_TYPES[e.type];player.sats+=et2.reward;
-addKill('WALLBANG! '+et2.deathMsgs[Math.floor(Math.random()*et2.deathMsgs.length)]+' +'+et2.reward);playSound('kill');scene.remove(e.mesh)}
-break}}}}};
+if(!hit){const dir2=new THREE.Vector3(0,0,-1);dir2.applyQuaternion(camera.quaternion);const ray2=new THREE.Raycaster(camera.position,dir2,0,50);const wh2=ray2.intersectObjects(wallGroup.children,false);if(wh2.length>=2&&wh2[1].distance-wh2[0].distance<1.5){for(const e of enemies){if(e.health<=0)continue;const toE2=new THREE.Vector3(e.x-camera.position.x,.6-camera.position.y,e.z-camera.position.z);const dot2=toE2.dot(dir2);if(dot2>wh2[1].distance&&dot2<wh2[1].distance+10){const perp2=toE2.clone().sub(dir2.clone().multiplyScalar(dot2)).length();if(perp2<.6){e.health-=w.damage*.4;e.hit=10;playSound("hit");if(e.health<=0){player.kills++;const et2=ENEMY_TYPES[e.type];player.sats+=et2.reward;addKill("WALLBANG! "+et2.deathMsgs[Math.floor(Math.random()*et2.deathMsgs.length)]+" +"+et2.reward);playSound("kill");scene.remove(e.mesh)}break}}}}}
 if(hit){hit.health-=w.damage;hit.hit=10;playSound('hit');
 // Flash enemy red
 hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0xff0000)});
@@ -568,21 +532,9 @@ for(const e of enemies){if(e.health<=0)continue;const et=ENEMY_TYPES[e.type];con
 for(const p of pickups){miniX.fillStyle='#f7931a';miniX.beginPath();miniX.arc(p.x*s,p.z*s,2,0,Math.PI*2);miniX.fill()}}
 
 // ===== START =====
-document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;roundActive=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
+document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
 renderer.domElement.addEventListener('click',()=>{if(started&&!isMobile)renderer.domElement.requestPointerLock()});
-// Buy menu handlers
-document.querySelectorAll('.buy-item').forEach(el=>{el.addEventListener('click',()=>{
-const item=el.dataset.item;const price=WEAPON_PRICES[item];
-if(player.sats>=price){player.sats-=price;
-if(item==='ak'){switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90}
-else if(item==='deagle'){switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35}
-else if(item==='awp'){switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo;weapons[2].reserve=20}
-else if(item==='armor'){player.armor=100}
-else if(item==='helmet'){player.helmet=true}
-const bbe=document.getElementById('buy-balance');if(bbe)bbe.textContent=player.sats.toLocaleString();
-playSound('sats');el.style.background='rgba(0,255,0,.2)';setTimeout(()=>{el.style.background='rgba(247,147,26,.1)'},300);
-showMessage('Bought '+item.toUpperCase()+'!')}
-else{el.style.background='rgba(255,0,0,.2)';setTimeout(()=>{el.style.background='rgba(247,147,26,.1)'},300)}})});
+document.querySelectorAll('.buy-item').forEach(el=>{el.addEventListener('click',()=>{const item=el.dataset.item;const price=WEAPON_PRICES[item];if(player.sats>=price){player.sats-=price;if(item==='ak'){switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90}else if(item==='deagle'){switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo}else if(item==='awp'){switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo}else if(item==='armor'){player.armor=100}else if(item==='helmet'){player.helmet=true}const bbe2=document.getElementById('buy-balance');if(bbe2)bbe2.textContent=player.sats.toLocaleString();playSound('sats')}})});
 
 // ===== GAME LOOP =====
 const clock=new THREE.Clock();
@@ -622,17 +574,13 @@ e.mesh.rotation.y=ang;
 // Taunt
 if(dist<8&&now-e.lastTaunt>5000+Math.random()*5000){e.lastTaunt=now;const et=ENEMY_TYPES[e.type]}
 // Move toward player
-if(dist>.8){let spd2=e.speed*dt*60;
-// Roger Ver sometimes runs away (switching teams)
-if(e.type==='roger'&&Math.sin(now*.001)>.7){spd2=-spd2*.5}
+if(dist>.8){const spd2=e.speed*dt*60;
 const emx=(dx/dist)*spd2,emz=(dz/dist)*spd2;
 if(map[Math.floor(e.z)*MW+Math.floor(e.x+emx+Math.sign(emx)*.3)]===0)e.x+=emx;
 if(map[Math.floor(e.z+emz+Math.sign(emz)*.3)*MW+Math.floor(e.x)]===0)e.z+=emz;
 e.mesh.position.set(e.x,0,e.z)}
 // Bob walk animation
 e.mesh.position.y=Math.sin(now*.005)*.03;
-// Satoshi shimmer
-if(e.type==='satoshi'){const shimmer=Math.sin(now*.01)*.04+.08;e.mesh.traverse(c=>{if(c.isMesh&&c.material.transparent)c.material.opacity=shimmer})}
 // Attack
 if(dist<1.3&&now-e.lastAttack>1000){e.lastAttack=now;const et=ENEMY_TYPES[e.type];player.health-=et.damage;
 playSound('hurt');dmgOv.style.opacity='.5';setTimeout(()=>dmgOv.style.opacity='0',150);screenShake=10;
@@ -644,14 +592,7 @@ p.mesh.position.y=.7+Math.sin(p.phase)*.15;
 p.mesh.children[0].rotation.y+=dt*2;
 if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'+p.sats+' SATS');playSound('sats');scene.remove(p.mesh);pickups.splice(i,1)}}
 // Round
-if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;
-buyPhase=true;buyTimer=BUY_TIME;
-const bme=document.getElementById('buy-menu');if(bme)bme.style.display='flex';
-document.getElementById('buy-balance').textContent=player.sats.toLocaleString();
-const roundBonus=3000+round*500;player.sats+=roundBonus;addKill('ROUND WON! +'+roundBonus+' sats bonus');
-const rn2=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];
-showMessage('ROUND '+round+' — '+rn2);playSound('round');
-document.getElementById('round-info').textContent='BITCOINERS | ROUND '+round+' — '+rn2+' | W:'+roundWins}}
+if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;buyPhase=true;buyTimer=BUY_TIME;const bme=document.getElementById("buy-menu");if(bme)bme.style.display="flex";const bbe=document.getElementById("buy-balance");if(bbe)bbe.textContent=player.sats.toLocaleString();const roundBonus=3000+round*500;player.sats+=roundBonus;addKill("ROUND WON! +"+roundBonus+" sats");const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
 const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-activeGun.position.y)*.08;
@@ -662,14 +603,13 @@ document.getElementById('health').style.color=player.health>50?'#0f0':player.hea
 document.getElementById('sats').textContent=player.sats.toLocaleString();
 document.getElementById('weapon').textContent=weapons[curWeapon].name;
 document.getElementById('ammo').textContent=weapons[curWeapon].ammo+'/'+weapons[curWeapon].reserve;
-document.getElementById('kills').textContent=player.kills;
-document.getElementById('armor').textContent=Math.floor(player.armor);
-document.getElementById('armor').style.color=player.armor>50?'#4af':player.armor>0?'#aa4':'#666';
+document.getElementById('kills').textContent=player.kills;const armorEl=document.getElementById('armor');if(armorEl){armorEl.textContent=Math.floor(player.armor);armorEl.style.color=player.armor>50?'#4af':player.armor>0?'#aa4':'#666'}
 // Kill feed
 const fE=document.getElementById('kill-feed');fE.innerHTML='';killFeed=killFeed.filter(k=>now-k.time<5000);killFeed.forEach(k=>{const d=document.createElement('div');d.textContent=k.text;fE.appendChild(d)});
 // Reload
 if(reloading){const el=document.getElementById('message');el.textContent='RELOADING...';el.style.opacity='.6'}
-drawMinimap()
+drawMinimap()}
+
 function animate(){const dt=Math.min(clock.getDelta(),.05);
 update(dt);
 // Render main scene
@@ -678,19 +618,5 @@ renderer.autoClear=true;renderer.render(scene,camera);
 requestAnimationFrame(animate)}
 animate();
 </script>
-<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace;pointer-events:auto">
-<h2 style="font-size:28px;margin-bottom:5px;text-shadow:0 0 15px rgba(247,147,26,.5)">₿UY MENU</h2>
-<div style="font-size:12px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div>
-<div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px">
-<div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">AK-₿7</div><div style="font-size:11px;color:#888">Full auto rifle</div><div style="font-size:14px;color:#f7931a;margin-top:4px">2,700 sats</div></div>
-<div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">₿EAGLE</div><div style="font-size:11px;color:#888">Heavy pistol</div><div style="font-size:14px;color:#f7931a;margin-top:4px">700 sats</div></div>
-<div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">SA₿OT</div><div style="font-size:11px;color:#888">Sniper rifle</div><div style="font-size:14px;color:#f7931a;margin-top:4px">4,750 sats</div></div>
-</div>
-<div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px">
-<div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">ARMOR</div><div style="font-size:11px;color:#888">50% damage reduction</div><div style="font-size:14px;color:#4a4;margin-top:4px">1,000 sats</div></div>
-<div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">HELMET</div><div style="font-size:11px;color:#888">Headshot protection</div><div style="font-size:14px;color:#4a4;margin-top:4px">350 sats</div></div>
-</div>
-<div style="font-size:12px;color:#666">Click to buy | Press B to close | Pistol is free</div>
-</div>
 </body>
 </html>
