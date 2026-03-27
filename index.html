@@ -250,7 +250,7 @@ scene.add(wallGroup);
 // ===== PLAYER =====
 const player={x:2.5,z:2.5,angle:0,pitch:0,health:100,sats:16000,kills:0,armor:0,helmet:false};
 let bobPhase=0,bobAmt=0,screenShake=0;
-let buyPhase=false,buyTimer=0,roundWins=0;
+let buyPhase=false,satoshiUnlocked=false,buyTimer=0,roundWins=0;
 const WEAPON_PRICES={ak:2700,deagle:700,awp:4750,armor:1000,helmet:350};const BUY_TIME=10;
 
 // ===== WEAPONS =====
@@ -587,7 +587,7 @@ document.querySelectorAll('.buy-item').forEach(el=>{el.addEventListener('click',
 // ===== GAME LOOP =====
 const clock=new THREE.Clock();
 function update(dt){if(!started||gameOver)return;
-const spd=(keys['shift']?.12:.07)*dt*60;let mx=0,mz=0;
+const spd=(keys['shift']?.12:.07)*(satoshiUnlocked?1.3:1)*dt*60;let mx=0,mz=0;
 if(keys['w']){mx-=Math.sin(player.angle)*spd;mz-=Math.cos(player.angle)*spd}
 if(keys['s']){mx+=Math.sin(player.angle)*spd;mz+=Math.cos(player.angle)*spd}
 if(keys['a']){mx-=Math.cos(player.angle)*spd;mz+=Math.sin(player.angle)*spd}
@@ -651,7 +651,7 @@ document.getElementById('health').style.color=player.health>50?'#0f0':player.hea
 document.getElementById('sats').textContent=player.sats.toLocaleString();
 document.getElementById('weapon').textContent=weapons[curWeapon].name;
 document.getElementById('ammo').textContent=weapons[curWeapon].ammo+'/'+weapons[curWeapon].reserve;
-document.getElementById('kills').textContent=player.kills;const armorEl=document.getElementById('armor');if(armorEl){armorEl.textContent=Math.floor(player.armor);armorEl.style.color=player.armor>50?'#4af':player.armor>0?'#aa4':'#666'}
+document.getElementById('kills').textContent=player.kills;if(satoshiUnlocked){document.getElementById('round-info').style.color='#00ffff';document.getElementById('round-info').style.textShadow='0 0 10px #00ffff'}const armorEl=document.getElementById('armor');if(armorEl){armorEl.textContent=Math.floor(player.armor);armorEl.style.color=player.armor>50?'#4af':player.armor>0?'#aa4':'#666'}
 // Kill feed
 const fE=document.getElementById('kill-feed');fE.innerHTML='';killFeed=killFeed.filter(k=>now-k.time<5000);killFeed.forEach(k=>{const d=document.createElement('div');d.textContent=k.text;fE.appendChild(d)});
 // Reload
