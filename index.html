@@ -552,7 +552,13 @@ return closest}
 
 function shoot(){const w=weapons[curWeapon],now=Date.now();if(reloading||w.ammo<=0||now-lastShot<w.fireRate)return;if(!w.auto&&!canShoot)return;
 lastShot=now;w.ammo--;if(!w.auto)canShoot=false;
-muzzleFlash=3;muzzleLight.intensity=3;
+muzzleFlash=4;muzzleLight.intensity=3;
+// Spray pattern calc
+const patterns=[SPRAY_AK,SPRAY_DEG,SPRAY_AWP];
+const pat=patterns[curWeapon];
+const sprayY=pat[Math.min(sprayIdx,pat.length-1)];
+const sprayX=(Math.random()-.5)*w.spread+(sprayIdx>5?(Math.sin(sprayIdx*.5)*.02):0);
+sprayIdx++;sprayReset=Date.now();
 recoilPitch=w.recoilAmt+sprayY;screenShake=w.recoilAmt*30;player.angle+=sprayX;
 playSound(w.sndType);
 const hit=shootRay();
