@@ -479,7 +479,7 @@ pickups.push({x,z,sats:Math.floor(Math.random()*5000)+1000,mesh:g,phase:Math.ran
 const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
 if(isMobile){document.body.classList.add('mobile');document.getElementById('ctrl-text').innerHTML='Left stick — Move | Right side — Look<br>FIRE — Shoot | R — Reload'}
 const keys={};let mouseDown=false;
-document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
+document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(e.key==='b'&&buyPhase){const bm=document.getElementById('buy-menu');bm.style.display=bm.style.display==='flex'?'none':'flex'}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
 document.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
 document.addEventListener('mousedown',()=>{if(!isMobile)mouseDown=true});
 document.addEventListener('mouseup',()=>{if(!isMobile){mouseDown=false;canShoot=true}});
@@ -566,6 +566,19 @@ for(const p of pickups){miniX.fillStyle='#f7931a';miniX.beginPath();miniX.arc(p.
 // ===== START =====
 document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
 renderer.domElement.addEventListener('click',()=>{if(started&&!isMobile)renderer.domElement.requestPointerLock()});
+// Buy menu handlers
+document.querySelectorAll('.buy-item').forEach(el=>{el.addEventListener('click',()=>{
+const item=el.dataset.item;const price=WEAPON_PRICES[item];
+if(player.sats>=price){player.sats-=price;
+if(item==='ak'){switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90}
+else if(item==='deagle'){switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35}
+else if(item==='awp'){switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo;weapons[2].reserve=20}
+else if(item==='armor'){player.armor=100}
+else if(item==='helmet'){player.helmet=true}
+document.getElementById('buy-balance').textContent=player.sats.toLocaleString();
+playSound('sats');el.style.background='rgba(0,255,0,.2)';setTimeout(()=>{el.style.background='rgba(247,147,26,.1)'},300);
+showMessage('Bought '+item.toUpperCase()+'!')}
+else{el.style.background='rgba(255,0,0,.2)';setTimeout(()=>{el.style.background='rgba(247,147,26,.1)'},300)}})});
 
 // ===== GAME LOOP =====
 const clock=new THREE.Clock();
@@ -627,7 +640,16 @@ p.mesh.position.y=.7+Math.sin(p.phase)*.15;
 p.mesh.children[0].rotation.y+=dt*2;
 if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'+p.sats+' SATS');playSound('sats');scene.remove(p.mesh);pickups.splice(i,1)}}
 // Round
-if(enemies.every(e=>e.health<=0)){round++;const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
+if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;
+// Start buy phase
+buyPhase=true;buyTimer=BUY_TIME;
+document.getElementById('buy-menu').style.display='flex';
+document.getElementById('buy-balance').textContent=player.sats.toLocaleString();
+// Award round bonus
+const roundBonus=3000+round*500;player.sats+=roundBonus;addKill('ROUND WON! +'+roundBonus+' sats bonus');const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');}}document.getElementById('round-info').textContent='₿ITCOINERS | ROUND '+round+' — '+rn+' | W:'+roundWins;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=100;
+// Free pistol each round
+weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35;
+weapons.forEach(w=>{if(w.ammo>0)w.reserve+=w.maxAmmo})}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
 const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-activeGun.position.y)*.08;
@@ -639,6 +661,8 @@ document.getElementById('sats').textContent=player.sats.toLocaleString();
 document.getElementById('weapon').textContent=weapons[curWeapon].name;
 document.getElementById('ammo').textContent=weapons[curWeapon].ammo+'/'+weapons[curWeapon].reserve;
 document.getElementById('kills').textContent=player.kills;
+document.getElementById('armor').textContent=Math.floor(player.armor);
+document.getElementById('armor').style.color=player.armor>50?'#4af':player.armor>0?'#aa4':'#666';
 // Kill feed
 const fE=document.getElementById('kill-feed');fE.innerHTML='';killFeed=killFeed.filter(k=>now-k.time<5000);killFeed.forEach(k=>{const d=document.createElement('div');d.textContent=k.text;fE.appendChild(d)});
 // Reload
