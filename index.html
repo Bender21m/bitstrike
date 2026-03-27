@@ -129,7 +129,7 @@ scene.fog=new THREE.FogExp2(0x0a0a15,.06);
 const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,.1,100);
 camera.position.set(2.5,.8,2.5);
 
-window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();weaponCam.aspect=camera.aspect;weaponCam.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
 
 // ===== LIGHTING =====
 const ambient=new THREE.AmbientLight(0x334455,.3);scene.add(ambient);
@@ -214,11 +214,7 @@ let curWeapon=0,lastShot=0,reloading=false,reloadStart=0,RELOAD_TIME=2000,canSho
 let recoilPitch=0;
 
 // Weapon viewmodel (3D)
-const weaponScene=new THREE.Scene();
-const weaponCam=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,.01,10);
-weaponCam.position.set(0,0,0);
-const weaponLight=new THREE.DirectionalLight(0xffffff,.8);weaponLight.position.set(1,2,1);weaponScene.add(weaponLight);
-const weaponAmb=new THREE.AmbientLight(0x666666,.5);weaponScene.add(weaponAmb);
+// Weapon is attached directly to camera
 
 function createGunModel(type){
 const g=new THREE.Group();
@@ -289,7 +285,7 @@ const ch=new THREE.Mesh(new THREE.BoxGeometry(.008,.008,.015),steel);ch.position
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.022,.022),btcMat);btc.position.set(.022,.005,-.06);g.add(btc);
 // Sling mount
 const sling=new THREE.Mesh(new THREE.TorusGeometry(.006,.0015,4,6,Math.PI),steel);sling.position.set(0,-.025,.17);sling.rotation.x=Math.PI/2;g.add(sling);
-g.scale.set(3,3,3);g.position.set(.3,-.35,-.6);g.rotation.set(0,.06,0);
+g.scale.set(4,4,4);g.position.set(.15,-.12,-.35);g.rotation.set(0,.08,0);
 }else if(type===1){
 // ===== DESERT EAGLE =====
 // Slide (massive, iconic angular shape)
@@ -335,7 +331,7 @@ const ss=new THREE.Mesh(new THREE.BoxGeometry(.003,.008,.012),steel);ss.position
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.018,.018),btcMat);btc.position.set(.02,.015,-.08);g.add(btc);
 // Ejection port
 const ep=new THREE.Mesh(new THREE.BoxGeometry(.001,.012,.025),new THREE.MeshStandardMaterial({color:0x050505}));ep.position.set(.02,.02,-.06);g.add(ep);
-g.scale.set(3,3,3);g.position.set(.22,-.38,-.5);g.rotation.set(0,.04,0);
+g.scale.set(4,4,4);g.position.set(.1,-.13,-.3);g.rotation.set(0,.05,0);
 }else{
 // ===== AWP / SNIPER =====
 // Receiver (long action)
@@ -400,8 +396,8 @@ g.position.set(.28,-.24,-.4);g.rotation.set(0,.05,0)}
 return g}
 
 let gunModels=[createGunModel(0),createGunModel(1),createGunModel(2)];
-let activeGun=gunModels[0];weaponScene.add(activeGun);
-function switchWeapon(idx){weaponScene.remove(activeGun);curWeapon=idx;activeGun=gunModels[idx];weaponScene.add(activeGun);reloading=false;updWB()}
+let activeGun=gunModels[0];camera.add(activeGun);
+function switchWeapon(idx){camera.remove(activeGun);curWeapon=idx;activeGun=gunModels[idx];camera.add(activeGun);reloading=false;updWB()}
 
 // Muzzle flash light
 const muzzleLight=new THREE.PointLight(0xffaa33,0,8);muzzleLight.position.set(0,.8,-1);scene.add(muzzleLight);
@@ -592,8 +588,8 @@ if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'
 if(enemies.every(e=>e.health<=0)){round++;const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
-const gunBaseYs=[-.35,-.38,-.38];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*5-activeGun.position.y)*.15;
-activeGun.rotation.x=recoilPitch*5;
+const gunBaseYs=[-.12,-.13,-.12];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*3-activeGun.position.y)*.15;
+activeGun.rotation.x=recoilPitch*3;
 // HUD
 document.getElementById('health').textContent=Math.max(0,player.health);
 document.getElementById('health').style.color=player.health>50?'#0f0':player.health>25?'#ff0':'#f00';
@@ -611,14 +607,7 @@ function animate(){const dt=Math.min(clock.getDelta(),.05);
 update(dt);
 // Render main scene
 renderer.autoClear=true;renderer.render(scene,camera);
-// Render weapon overlay
-if(started&&!gameOver){
-renderer.autoClear=false;
-renderer.clearDepth();
-weaponCam.aspect=camera.aspect;
-weaponCam.updateProjectionMatrix();
-renderer.render(weaponScene,weaponCam);}
-renderer.autoClear=true;
+// Weapons are attached to camera, rendered in main scene
 requestAnimationFrame(animate)}
 animate();
 </script>
