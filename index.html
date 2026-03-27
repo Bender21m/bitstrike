@@ -55,9 +55,9 @@ canvas{display:block}
 <div id="hud">
 <div class="stat"><div class="label">HEALTH</div><div class="value" id="health">100</div></div>
 <div class="stat"><div class="label">₿ SATS</div><div class="value" id="sats">0</div></div>
-<div class="stat"><div class="label">WEAPON</div><div class="value" id="weapon">AK-₿7 [F1]</div></div>
+<div class="stat"><div class="label">WEAPON</div><div class="value" id="weapon">AK-₿7 [6]</div></div>
 <div class="stat"><div class="label">AMMO</div><div class="value" id="ammo">30/90</div></div>
-<div class="stat"><div class="label">ARMOR [F4]</div><div class="value" id="armor">0</div></div><div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
+<div class="stat"><div class="label">ARMOR [9]</div><div class="value" id="armor">0</div></div><div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
 </div>
 <div id="message"></div>
 <div id="kill-feed"></div>
@@ -72,7 +72,7 @@ canvas{display:block}
 <div class="weapon-btn" data-w="2">SAB</div>
 </div>
 </div>
-<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:18px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">AK-₿7</div><div style="font-size:18px;color:#888">Full auto</div><div style="font-size:18px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">₿EAGLE [F2]</div><div style="font-size:18px;color:#888">Pistol</div><div style="font-size:18px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">SA₿OT [F3]</div><div style="font-size:18px;color:#888">Sniper</div><div style="font-size:18px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">ARMOR</div><div style="font-size:18px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">HELMET [F5]</div><div style="font-size:18px;color:#4a4">350 sats</div></div></div><div style="font-size:18px;color:#666">CLICK a weapon to buy it<br><br><div id="buy-close" style="cursor:pointer;background:#f7931a;color:#000;padding:12px 30px;border-radius:8px;font-size:20px;font-weight:bold;pointer-events:auto;display:inline-block">START ROUND</div></div></div>
+<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:18px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">AK-₿7</div><div style="font-size:18px;color:#888">Full auto</div><div style="font-size:18px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">₿EAGLE [7]</div><div style="font-size:18px;color:#888">Pistol</div><div style="font-size:18px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">SA₿OT [8]</div><div style="font-size:18px;color:#888">Sniper</div><div style="font-size:18px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">ARMOR</div><div style="font-size:18px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">HELMET [0]</div><div style="font-size:18px;color:#4a4">350 sats</div></div></div><div style="font-size:18px;color:#666">CLICK a weapon to buy it<br><br><div id="buy-close" style="cursor:pointer;background:#f7931a;color:#000;padding:12px 30px;border-radius:8px;font-size:20px;font-weight:bold;pointer-events:auto;display:inline-block">START ROUND</div></div></div>
 <div id="start-screen">
 <h1>₿ITSTRIKE</h1>
 <div class="sub">Stack Sats. Shoot Fiat.</div>
@@ -128,7 +128,7 @@ document.body.prepend(renderer.domElement);
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x0a0a15);
-scene.fog=new THREE.FogExp2(0x0a0a15,.03);
+scene.fog=new THREE.FogExp2(0x0a0a15,.015);
 
 const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,.1,100);
 camera.position.set(2.5,.8,2.5);
@@ -136,20 +136,20 @@ camera.position.set(2.5,.8,2.5);
 window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
 
 // ===== LIGHTING =====
-const ambient=new THREE.AmbientLight(0x666666,.5);scene.add(ambient);
+const ambient=new THREE.AmbientLight(0xaaaaaa,.7);scene.add(ambient);
 
-const dirLight=new THREE.DirectionalLight(0xffeedd,.4);
+const dirLight=new THREE.DirectionalLight(0xffeedd,.8);
 dirLight.position.set(10,15,10);dirLight.castShadow=true;
 dirLight.shadow.mapSize.set(1024,1024);dirLight.shadow.camera.near=1;dirLight.shadow.camera.far=50;
 dirLight.shadow.camera.left=-20;dirLight.shadow.camera.right=20;dirLight.shadow.camera.top=20;dirLight.shadow.camera.bottom=-20;
 scene.add(dirLight);
 
 // Point lights for atmosphere
-const btcLight=new THREE.PointLight(0xf7931a,.5,15);btcLight.position.set(12,3,12);scene.add(btcLight);
-const btcLight2=new THREE.PointLight(0xf7931a,.3,10);btcLight2.position.set(5,3,18);scene.add(btcLight2);
+const btcLight=new THREE.PointLight(0xf7931a,1,20);btcLight.position.set(12,3,12);scene.add(btcLight);
+const btcLight2=new THREE.PointLight(0xf7931a,.8,15);btcLight2.position.set(5,3,18);scene.add(btcLight2);
 
 // Player flashlight
-const flashlight=new THREE.SpotLight(0xffffff,1.5,25,Math.PI*.25,.5,1);
+const flashlight=new THREE.SpotLight(0xffffff,2,30,Math.PI*.25,.5,1);
 flashlight.castShadow=true;flashlight.shadow.mapSize.set(512,512);
 camera.add(flashlight);flashlight.position.set(0,0,0);flashlight.target.position.set(0,0,-1);
 camera.add(flashlight.target);scene.add(camera);
@@ -698,11 +698,11 @@ const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
 if(isMobile){document.body.classList.add('mobile');document.getElementById('ctrl-text').innerHTML='Left stick — Move | Right side — Look<br>FIRE — Shoot | R — Reload'}
 const keys={};let mouseDown=false;
 document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(buyPhase){
-if(e.key==='F1'||e.key==='f1'){e.preventDefault();if(player.sats>=2700){player.sats-=2700;switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90;showMessage('Bought AK-₿7!')}}
-if(e.key==='F2'||e.key==='f2'){e.preventDefault();if(player.sats>=700){player.sats-=700;switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo;showMessage('Bought ₿EAGLE!')}}
-if(e.key==='F3'||e.key==='f3'){e.preventDefault();if(player.sats>=4750){player.sats-=4750;switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo;showMessage('Bought SA₿OT!')}}
-if(e.key==='F4'||e.key==='f4'){e.preventDefault();if(player.sats>=1000){player.sats-=1000;player.armor=100;showMessage('Bought ARMOR!')}}
-if(e.key==='F5'||e.key==='f5'){e.preventDefault();if(player.sats>=350){player.sats-=350;player.helmet=true;showMessage('Bought HELMET!')}}
+if(e.key==='6'){if(player.sats>=2700){player.sats-=2700;switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90;showMessage('Bought AK-₿7!')}}
+if(e.key==='7'){if(player.sats>=700){player.sats-=700;switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo;showMessage('Bought ₿EAGLE!')}}
+if(e.key==='8'){if(player.sats>=4750){player.sats-=4750;switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo;showMessage('Bought SA₿OT!')}}
+if(e.key==='9'){if(player.sats>=1000){player.sats-=1000;player.armor=100;showMessage('Bought ARMOR!')}}
+if(e.key==='0'){if(player.sats>=350){player.sats-=350;player.helmet=true;showMessage('Bought HELMET!')}}
 var bbe3=document.getElementById('buy-balance');if(bbe3)bbe3.textContent=player.sats.toLocaleString();
 }
 if(e.key==='n'){loadMap(++currentMap);showMessage(MAPS[currentMap%MAPS.length].name)}if(e.key==='b'&&buyPhase){const bm=document.getElementById('buy-menu');if(bm)bm.style.display=bm.style.display==='flex'?'none':'flex'}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
