@@ -580,6 +580,15 @@ const aimY=camera.position.y+Math.sin(player.pitch)*5;
 const isHeadshot=aimY>headY-.3;
 const dmgMult=isHeadshot?2:1;
 hit.health-=w.damage*dmgMult;hit.hit=10;playSound('hit');
+// Floating damage number
+try{const dmgDiv=document.createElement('div');
+dmgDiv.textContent=isHeadshot?'HS! '+(w.damage*2):'-'+w.damage;
+dmgDiv.style.cssText='position:fixed;color:'+(isHeadshot?'#ff4444':'#f7931a')+';font:bold 20px monospace;pointer-events:none;z-index:200;text-shadow:0 0 5px rgba(0,0,0,.8)';
+dmgDiv.style.left=(window.innerWidth/2+Math.random()*60-30)+'px';
+dmgDiv.style.top=(window.innerHeight/2-20)+'px';
+document.body.appendChild(dmgDiv);
+let dy=0;const dmgAnim=setInterval(()=>{dy+=2;dmgDiv.style.top=(window.innerHeight/2-20-dy)+'px';
+dmgDiv.style.opacity=1-dy/80;if(dy>80){clearInterval(dmgAnim);dmgDiv.remove()}},16)}catch(ex){}
 if(isHeadshot)addKill('HEADSHOT!');
 // Flash enemy red
 hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0xff0000)});
@@ -681,7 +690,7 @@ else{player.sats+=p.sats;}if(!p.ammo)showMessage('+'+p.sats+' SATS');playSound('
 if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;buyPhase=true;buyTimer=BUY_TIME;const bme=document.getElementById("buy-menu");if(bme)bme.style.display="flex";const bbe=document.getElementById("buy-balance");if(bbe)bbe.textContent=player.sats.toLocaleString();const roundBonus=3000+round*500;player.sats+=roundBonus;addKill("ROUND WON! +"+roundBonus+" sats");const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
-const gunBaseYs=[-.1,-.1,-.1];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-activeGun.position.y)*.08;
+const gunBaseYs=[-.1,-.1,-.1];const reloadDip=reloading?Math.sin((Date.now()-reloadStart)/RELOAD_TIME*Math.PI)*.05:0;activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-reloadDip-activeGun.position.y)*.08;
 activeGun.rotation.x=recoilPitch*3;
 // HUD
 document.getElementById('health').textContent=Math.max(0,player.health);
