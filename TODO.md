@@ -47,3 +47,5 @@
 - [ ] Multiplayer (WebRTC/WebSocket)
 - [ ] Bitcoin price ticker in HUD
 - [ ] Sats rewards via Lightning (lol)
+
+- [ ] Reduce gun size by 20%
