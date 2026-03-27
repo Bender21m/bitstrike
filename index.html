@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BitStrike 1.6</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#000;overflow:hidden;font-family:'Courier New',monospace;cursor:none}canvas{display:block}
+#hud{position:absolute;bottom:0;left:0;right:0;height:80px;background:rgba(0,0,0,.8);border-top:2px solid #f7931a;display:flex;align-items:center;justify-content:space-between;padding:0 30px;color:#f7931a}
+#hud .stat{text-align:center}#hud .stat .label{font-size:10px;opacity:.7}#hud .stat .value{font-size:24px;font-weight:bold}
+#crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:10}
+#crosshair div{position:absolute;background:#0f0}#crosshair .h{width:20px;height:2px;top:-1px}#crosshair .v{height:20px;width:2px;left:-1px}
+#crosshair .h.l{right:8px}#crosshair .h.r{left:8px}#crosshair .v.t{bottom:8px}#crosshair .v.b{top:8px}
+#message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#f7931a;font-size:48px;font-weight:bold;text-shadow:0 0 20px rgba(247,147,26,.8);pointer-events:none;opacity:0;transition:opacity .3s;z-index:20}
+#kill-feed{position:absolute;top:10px;right:10px;color:#fff;font-size:12px;text-align:right;z-index:10}
+#kill-feed div{margin-bottom:4px;opacity:.9;background:rgba(0,0,0,.5);padding:2px 8px}
+#start-screen{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;z-index:100}
+#start-screen h1{font-size:64px;margin-bottom:10px;text-shadow:0 0 30px rgba(247,147,26,.6)}
+#start-screen .sub{font-size:18px;color:#888;margin-bottom:40px}
+#start-screen .controls{font-size:14px;color:#aaa;line-height:2;margin-bottom:30px}
+#start-screen .start-btn{font-size:24px;color:#f7931a;cursor:pointer;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+#minimap-c{position:absolute;top:10px;left:10px;width:150px;height:150px;border:1px solid #f7931a;background:rgba(0,0,0,.7);z-index:10}
+#round-info{position:absolute;top:10px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;background:rgba(0,0,0,.6);padding:4px 12px;border:1px solid #333;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="crosshair"><div class="h l"></div><div class="h r"></div><div class="v t"></div><div class="v b"></div></div>
+<div id="hud">
+<div class="stat"><div class="label">HEALTH</div><div class="value" id="health">100</div></div>
+<div class="stat"><div class="label">₿ SATS</div><div class="value" id="sats">0</div></div>
+<div class="stat"><div class="label">WEAPON</div><div class="value" id="weapon">AK-₿7</div></div>
+<div class="stat"><div class="label">AMMO</div><div class="value" id="ammo">30/90</div></div>
+<div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
+</div>
+<div id="message"></div>
+<div id="kill-feed"></div>
+<canvas id="minimap-c" width="150" height="150"></canvas>
+<div id="round-info">ROUND 1 — HODL OR DIE</div>
+<div id="start-screen">
+<h1>₿itStrike 1.6</h1>
+<div class="sub">Counter-Terrorists Win... Bitcoin</div>
+<div class="controls">WASD — Move | Mouse — Look | Click — Shoot | R — Reload<br>1/2/3 — Switch Weapons | Shift — Sprint</div>
+<div class="start-btn">[ CLICK TO HODL ]</div>
+</div>
+<script>
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const miniCanvas=document.getElementById('minimap-c'),miniCtx=miniCanvas.getContext('2d');
+let W,H;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}resize();window.addEventListener('resize',resize);
+const MW=24,MH=24,map=[
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,1,1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1,1,0,0,1,
+1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,
+1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+1,0,0,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,0,0,1,
+1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,
+1,0,0,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,0,0,1,
+1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,
+1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,
+1,0,0,1,1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,1,1,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+let player={x:2.5,y:2.5,angle:0,health:100,sats:0,kills:0},bobPhase=0,bobAmt=0;
+const weapons=[
+{name:'AK-₿7',ammo:30,maxAmmo:30,reserve:90,damage:25,fireRate:100,auto:true,spread:.04},
+{name:'₿EAGLE',ammo:7,maxAmmo:7,reserve:35,damage:50,fireRate:400,auto:false,spread:.02},
+{name:'SA₿OT',ammo:5,maxAmmo:5,reserve:20,damage:100,fireRate:800,auto:false,spread:.005}];
+let curWeapon=0,lastShot=0,reloading=false,reloadStart=0,RELOAD_TIME=2000,muzzleFlash=0,canShoot=true;
+let enemies=[],round=1,pickups=[],killFeed=[],started=false,gameOver=false;
+function spawnEnemies(n){enemies=[];for(let i=0;i<n;i++){let x,y;do{x=Math.floor(Math.random()*(MW-2))+1+.5;y=Math.floor(Math.random()*(MH-2))+1+.5}while(map[Math.floor(y)*MW+Math.floor(x)]!==0||Math.hypot(x-player.x,y-player.y)<5);enemies.push({x,y,health:50+round*10,maxHealth:50+round*10,speed:.015+round*.003,angle:Math.random()*Math.PI*2,lastAttack:0,type:Math.random()>.7?'whale':'bear',hit:0})}}
+function spawnPickups(n){for(let i=0;i<n;i++){let x,y;do{x=Math.floor(Math.random()*(MW-2))+1+.5;y=Math.floor(Math.random()*(MH-2))+1+.5}while(map[Math.floor(y)*MW+Math.floor(x)]!==0);pickups.push({x,y,sats:Math.floor(Math.random()*5000)+1000,bob:Math.random()*Math.PI*2})}}
+function addKill(t){killFeed.unshift({text:t,time:Date.now()});if(killFeed.length>5)killFeed.pop()}
+const keys={};let mouseDown=false;
+document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r')startReload();if(e.key==='1'){curWeapon=0;reloading=false}if(e.key==='2'){curWeapon=1;reloading=false}if(e.key==='3'){curWeapon=2;reloading=false}});
+document.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
+document.addEventListener('mousedown',()=>{mouseDown=true});
+document.addEventListener('mouseup',()=>{mouseDown=false;canShoot=true});
+document.addEventListener('mousemove',e=>{if(document.pointerLockElement)player.angle+=e.movementX*.003});
+function startReload(){const w=weapons[curWeapon];if(reloading||w.ammo===w.maxAmmo||w.reserve<=0)return;reloading=true;reloadStart=Date.now()}
+function castRay(ox,oy,angle){const dx=Math.cos(angle),dy=Math.sin(angle);let t=0;for(let i=0;i<300;i++){t+=.02;const x=ox+dx*t,y=oy+dy*t,mx=Math.floor(x),my=Math.floor(y);if(mx<0||mx>=MW||my<0||my>=MH)return{dist:t,wall:1};if(map[my*MW+mx]===1){const pmx=Math.floor(ox+dx*(t-.02)),pmy=Math.floor(oy+dy*(t-.02));const side=pmx!==mx?0:1;const tc=side===0?y-my:x-mx;return{dist:t,wall:1,side,texCoord:tc}}}return{dist:20,wall:0}}
+function shoot(){const w=weapons[curWeapon],now=Date.now();if(reloading||w.ammo<=0||now-lastShot<w.fireRate)return;if(!w.auto&&!canShoot)return;lastShot=now;w.ammo--;if(!w.auto)canShoot=false;muzzleFlash=3;
+const spread=(Math.random()-.5)*w.spread,sa=player.angle+spread;let closestHit=null,closestDist=Infinity;
+for(const e of enemies){if(e.health<=0)continue;const dx=e.x-player.x,dy=e.y-player.y,dist=Math.sqrt(dx*dx+dy*dy);let ad=Math.atan2(dy,dx)-sa;while(ad>Math.PI)ad-=Math.PI*2;while(ad<-Math.PI)ad+=Math.PI*2;
+if(Math.abs(ad)<.4/dist&&dist<closestDist){const wh=castRay(player.x,player.y,sa);if(wh.dist>dist){closestHit=e;closestDist=dist}}}
+if(closestHit){closestHit.health-=w.damage;closestHit.hit=8;if(closestHit.health<=0){player.kills++;const reward=closestHit.type==='whale'?10000:5000;player.sats+=reward;addKill('You ₿LASTED '+(closestHit.type==='whale'?'WHALE':'BEAR')+' +'+reward+' sats')}}
+if(w.ammo<=0&&w.reserve>0)startReload()}
+function showMessage(msg){const el=document.getElementById('message');el.textContent=msg;el.style.opacity=1;setTimeout(()=>el.style.opacity=0,2000)}
+document.getElementById('start-screen').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';canvas.requestPointerLock();started=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
+canvas.addEventListener('click',()=>{if(started)canvas.requestPointerLock()});
+function update(){if(!started||gameOver)return;
+const spd=keys['shift']?.06:.035;let mx=0,my=0;
+if(keys['w']){mx+=Math.cos(player.angle)*spd;my+=Math.sin(player.angle)*spd}
+if(keys['s']){mx-=Math.cos(player.angle)*spd;my-=Math.sin(player.angle)*spd}
+if(keys['a']){mx+=Math.cos(player.angle-Math.PI/2)*spd;my+=Math.sin(player.angle-Math.PI/2)*spd}
+if(keys['d']){mx+=Math.cos(player.angle+Math.PI/2)*spd;my+=Math.sin(player.angle+Math.PI/2)*spd}
+const m=.2;if(map[Math.floor(player.y)*MW+Math.floor(player.x+mx+Math.sign(mx)*m)]===0)player.x+=mx;
+if(map[Math.floor(player.y+my+Math.sign(my)*m)*MW+Math.floor(player.x)]===0)player.y+=my;
+if(Math.abs(mx)+Math.abs(my)>.001){bobPhase+=.12;bobAmt=Math.min(bobAmt+.3,8)}else bobAmt*=.9;
+if(mouseDown)shoot();
+if(reloading&&Date.now()-reloadStart>RELOAD_TIME){const w=weapons[curWeapon],need=w.maxAmmo-w.ammo,give=Math.min(need,w.reserve);w.ammo+=give;w.reserve-=give;reloading=false}
+const now=Date.now();for(const e of enemies){if(e.health<=0)continue;const dx=player.x-e.x,dy=player.y-e.y,dist=Math.sqrt(dx*dx+dy*dy);e.angle=Math.atan2(dy,dx);
+if(dist>.8){const emx=(dx/dist)*e.speed,emy=(dy/dist)*e.speed;if(map[Math.floor(e.y)*MW+Math.floor(e.x+emx+Math.sign(emx)*.3)]===0)e.x+=emx;if(map[Math.floor(e.y+emy+Math.sign(emy)*.3)*MW+Math.floor(e.x)]===0)e.y+=emy}
+if(dist<1.2&&now-e.lastAttack>1000){e.lastAttack=now;const dmg=e.type==='whale'?20:10;player.health-=dmg;showMessage('-'+dmg+' HP');if(player.health<=0){gameOver=true;showMessage('REKT — '+player.sats+' SATS LOST')}}
+if(e.hit>0)e.hit--}
+for(let i=pickups.length-1;i>=0;i--){const p=pickups[i];p.bob+=.05;if(Math.hypot(p.x-player.x,p.y-player.y)<.5){player.sats+=p.sats;showMessage('+'+p.sats+' SATS');pickups.splice(i,1)}}
+if(enemies.every(e=>e.health<=0)){round++;showMessage('ROUND '+round+(round>3?' — DIAMOND HANDS':' — HODL OR DIE'));document.getElementById('round-info').textContent='ROUND '+round+(round>3?' — DIAMOND HANDS':' — HODL OR DIE');spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
+if(muzzleFlash>0)muzzleFlash--}
+function render(){ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,W,H);if(!started){requestAnimationFrame(render);return}
+const halfH=H/2,bob=Math.sin(bobPhase)*bobAmt,fov=Math.PI/3,numRays=Math.floor(W/2);
+const skyG=ctx.createLinearGradient(0,0,0,halfH);skyG.addColorStop(0,'#0a0a1a');skyG.addColorStop(1,'#1a0a2e');ctx.fillStyle=skyG;ctx.fillRect(0,0,W,halfH);
+const flG=ctx.createLinearGradient(0,halfH,0,H-80);flG.addColorStop(0,'#2a1a0a');flG.addColorStop(1,'#1a1a1a');ctx.fillStyle=flG;ctx.fillRect(0,halfH,W,H-80-halfH);
+let sprites=[];for(const e of enemies){if(e.health<=0)continue;const dx=e.x-player.x,dy=e.y-player.y,dist=Math.sqrt(dx*dx+dy*dy);let a=Math.atan2(dy,dx)-player.angle;while(a>Math.PI)a-=Math.PI*2;while(a<-Math.PI)a+=Math.PI*2;if(Math.abs(a)<fov)sprites.push({type:'enemy',x:a,dist,enemy:e})}
+for(const p of pickups){const dx=p.x-player.x,dy=p.y-player.y,dist=Math.sqrt(dx*dx+dy*dy);let a=Math.atan2(dy,dx)-player.angle;while(a>Math.PI)a-=Math.PI*2;while(a<-Math.PI)a+=Math.PI*2;if(Math.abs(a)<fov)sprites.push({type:'pickup',x:a,dist,pickup:p})}
+sprites.sort((a,b)=>b.dist-a.dist);const wallDists=new Float32Array(numRays);
+for(let i=0;i<numRays;i++){const ra=player.angle-fov/2+(i/numRays)*fov,hit=castRay(player.x,player.y,ra),pd=hit.dist*Math.cos(ra-player.angle);wallDists[i]=pd;
+const wH=Math.min(H,(H*.8)/pd),wT=halfH-wH/2+bob,shade=Math.max(0,1-pd/12),ss=hit.side===1?.7:1;
+ctx.fillStyle='rgb('+Math.floor(247*shade*ss*.4)+','+Math.floor(147*shade*ss*.3)+','+Math.floor(26*shade*ss*.3)+')';ctx.fillRect(i*2,wT,2,wH);
+if(hit.texCoord!==undefined&&(hit.texCoord<.05||hit.texCoord>.95)){ctx.fillStyle='rgba(247,147,26,'+shade*.3+')';ctx.fillRect(i*2,wT,2,wH)}}
+for(const s of sprites){const sx=W/2+(s.x/fov)*W,pd=s.dist,sH=(H*.6)/pd,sT=halfH-sH/2+bob;
+if(s.type==='enemy'){const e=s.enemy,sW=sH*.6,sc=Math.floor((sx-sW/2)/2),ec=Math.floor((sx+sW/2)/2);
+for(let c=Math.max(0,sc);c<Math.min(numRays,ec);c++){if(wallDists[c]>pd){const sh=Math.max(0,1-pd/10);ctx.fillStyle=e.hit>0?'rgba(255,50,50,'+sh+')':e.type==='whale'?'rgba(50,100,255,'+sh+')':'rgba(180,80,80,'+sh+')';ctx.fillRect(c*2,sT,2,sH)}}
+if(pd<8){const bW=sW*.8,bX=sx-bW/2,bY=sT-10;ctx.fillStyle='#333';ctx.fillRect(bX,bY,bW,4);ctx.fillStyle=e.health/e.maxHealth>.3?'#f7931a':'#f33';ctx.fillRect(bX,bY,bW*(e.health/e.maxHealth),4);ctx.fillStyle='#fff';ctx.font='10px Courier New';ctx.textAlign='center';ctx.fillText(e.type==='whale'?'WHALE':'BEAR',sx,bY-4)}}
+else{const p=s.pickup,sz=sH*.3;ctx.fillStyle='rgba(247,147,26,'+Math.max(0,1-pd/10)+')';ctx.font=Math.floor(sz)+'px Arial';ctx.textAlign='center';ctx.fillText('\u20BF',sx,sT+sH/2+Math.sin(p.bob)*5)}}
+if(muzzleFlash>0){ctx.fillStyle='rgba(247,147,26,'+(muzzleFlash/3)+')';ctx.fillRect(W/2-30,H/2-30+bob,60,60)}
+ctx.fillStyle='#333';ctx.fillRect(W/2+50,H-180+bob*.5,120,100);ctx.fillStyle='#f7931a';ctx.font='bold 14px Courier New';ctx.textAlign='center';ctx.fillText(weapons[curWeapon].name,W/2+110,H-120+bob*.5);
+if(reloading){const prog=(Date.now()-reloadStart)/RELOAD_TIME;ctx.fillStyle='#f7931a';ctx.font='bold 20px Courier New';ctx.textAlign='center';ctx.fillText('RELOADING...',W/2,H/2+40);ctx.fillRect(W/2-50,H/2+50,100*prog,4)}
+document.getElementById('health').textContent=Math.max(0,player.health);document.getElementById('sats').textContent=player.sats.toLocaleString();document.getElementById('weapon').textContent=weapons[curWeapon].name;document.getElementById('ammo').textContent=weapons[curWeapon].ammo+'/'+weapons[curWeapon].reserve;document.getElementById('kills').textContent=player.kills;
+const hE=document.getElementById('health');hE.style.color=player.health>50?'#0f0':player.health>25?'#ff0':'#f00';
+const fE=document.getElementById('kill-feed');fE.innerHTML='';const now=Date.now();killFeed=killFeed.filter(k=>now-k.time<5000);killFeed.forEach(k=>{const d=document.createElement('div');d.textContent=k.text;d.style.color='#f7931a';fE.appendChild(d)});
+miniCtx.fillStyle='rgba(0,0,0,.8)';miniCtx.fillRect(0,0,150,150);const sc=150/MW;
+for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(map[y*MW+x]===1){miniCtx.fillStyle='#f7931a33';miniCtx.fillRect(x*sc,y*sc,sc,sc)}
+miniCtx.fillStyle='#0f0';miniCtx.beginPath();miniCtx.arc(player.x*sc,player.y*sc,3,0,Math.PI*2);miniCtx.fill();
+miniCtx.strokeStyle='#0f0';miniCtx.beginPath();miniCtx.moveTo(player.x*sc,player.y*sc);miniCtx.lineTo(player.x*sc+Math.cos(player.angle)*10,player.y*sc+Math.sin(player.angle)*10);miniCtx.stroke();
+for(const e of enemies){if(e.health<=0)continue;miniCtx.fillStyle=e.type==='whale'?'#33f':'#f33';miniCtx.beginPath();miniCtx.arc(e.x*sc,e.y*sc,2,0,Math.PI*2);miniCtx.fill()}
+for(const p of pickups){miniCtx.fillStyle='#f7931a';miniCtx.beginPath();miniCtx.arc(p.x*sc,p.y*sc,2,0,Math.PI*2);miniCtx.fill()}
+if(gameOver){ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#f7931a';ctx.font='bold 64px Courier New';ctx.textAlign='center';ctx.fillText('REKT',W/2,H/2-40);ctx.font='24px Courier New';ctx.fillText(player.sats.toLocaleString()+' SATS STACKED',W/2,H/2+20);ctx.fillText(player.kills+' BEARS LIQUIDATED',W/2,H/2+60);ctx.font='16px Courier New';ctx.fillStyle='#888';ctx.fillText('Refresh to try again',W/2,H/2+100)}
+requestAnimationFrame(render)}
+function gameLoop(){update();requestAnimationFrame(gameLoop)}render();gameLoop();
+</script>
+</body>
+</html>
