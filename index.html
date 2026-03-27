@@ -55,9 +55,9 @@ canvas{display:block}
 <div id="hud">
 <div class="stat"><div class="label">HEALTH</div><div class="value" id="health">100</div></div>
 <div class="stat"><div class="label">₿ SATS</div><div class="value" id="sats">0</div></div>
-<div class="stat"><div class="label">WEAPON</div><div class="value" id="weapon">AK-₿7</div></div>
+<div class="stat"><div class="label">WEAPON</div><div class="value" id="weapon">AK-₿7 [F1]</div></div>
 <div class="stat"><div class="label">AMMO</div><div class="value" id="ammo">30/90</div></div>
-<div class="stat"><div class="label">ARMOR</div><div class="value" id="armor">0</div></div><div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
+<div class="stat"><div class="label">ARMOR [F4]</div><div class="value" id="armor">0</div></div><div class="stat"><div class="label">KILLS</div><div class="value" id="kills">0</div></div>
 </div>
 <div id="message"></div>
 <div id="kill-feed"></div>
@@ -72,7 +72,7 @@ canvas{display:block}
 <div class="weapon-btn" data-w="2">SAB</div>
 </div>
 </div>
-<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:18px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">AK-₿7</div><div style="font-size:18px;color:#888">Full auto</div><div style="font-size:18px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">₿EAGLE</div><div style="font-size:18px;color:#888">Pistol</div><div style="font-size:18px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">SA₿OT</div><div style="font-size:18px;color:#888">Sniper</div><div style="font-size:18px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">ARMOR</div><div style="font-size:18px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">HELMET</div><div style="font-size:18px;color:#4a4">350 sats</div></div></div><div style="font-size:18px;color:#666">CLICK a weapon to buy it<br><br><div id="buy-close" style="cursor:pointer;background:#f7931a;color:#000;padding:12px 30px;border-radius:8px;font-size:20px;font-weight:bold;pointer-events:auto;display:inline-block">START ROUND</div></div></div>
+<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:18px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">AK-₿7</div><div style="font-size:18px;color:#888">Full auto</div><div style="font-size:18px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">₿EAGLE [F2]</div><div style="font-size:18px;color:#888">Pistol</div><div style="font-size:18px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">SA₿OT [F3]</div><div style="font-size:18px;color:#888">Sniper</div><div style="font-size:18px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">ARMOR</div><div style="font-size:18px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">HELMET [F5]</div><div style="font-size:18px;color:#4a4">350 sats</div></div></div><div style="font-size:18px;color:#666">CLICK a weapon to buy it<br><br><div id="buy-close" style="cursor:pointer;background:#f7931a;color:#000;padding:12px 30px;border-radius:8px;font-size:20px;font-weight:bold;pointer-events:auto;display:inline-block">START ROUND</div></div></div>
 <div id="start-screen">
 <h1>₿ITSTRIKE</h1>
 <div class="sub">Stack Sats. Shoot Fiat.</div>
@@ -510,7 +510,15 @@ pickups.push({x,z,sats:Math.floor(Math.random()*5000)+1000,mesh:g,phase:Math.ran
 const isMobile='ontouchstart'in window||navigator.maxTouchPoints>0;
 if(isMobile){document.body.classList.add('mobile');document.getElementById('ctrl-text').innerHTML='Left stick — Move | Right side — Look<br>FIRE — Shoot | R — Reload'}
 const keys={};let mouseDown=false;
-document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(e.key==='n'){loadMap(++currentMap);showMessage(MAPS[currentMap%MAPS.length].name)}if(e.key==='b'&&buyPhase){const bm=document.getElementById('buy-menu');if(bm)bm.style.display=bm.style.display==='flex'?'none':'flex'}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
+document.addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key==='r'){startReload();playSound('reload')}if(buyPhase){
+if(e.key==='F1'||e.key==='f1'){e.preventDefault();if(player.sats>=2700){player.sats-=2700;switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90;showMessage('Bought AK-₿7!')}}
+if(e.key==='F2'||e.key==='f2'){e.preventDefault();if(player.sats>=700){player.sats-=700;switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo;showMessage('Bought ₿EAGLE!')}}
+if(e.key==='F3'||e.key==='f3'){e.preventDefault();if(player.sats>=4750){player.sats-=4750;switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo;showMessage('Bought SA₿OT!')}}
+if(e.key==='F4'||e.key==='f4'){e.preventDefault();if(player.sats>=1000){player.sats-=1000;player.armor=100;showMessage('Bought ARMOR!')}}
+if(e.key==='F5'||e.key==='f5'){e.preventDefault();if(player.sats>=350){player.sats-=350;player.helmet=true;showMessage('Bought HELMET!')}}
+var bbe3=document.getElementById('buy-balance');if(bbe3)bbe3.textContent=player.sats.toLocaleString();
+}
+if(e.key==='n'){loadMap(++currentMap);showMessage(MAPS[currentMap%MAPS.length].name)}if(e.key==='b'&&buyPhase){const bm=document.getElementById('buy-menu');if(bm)bm.style.display=bm.style.display==='flex'?'none':'flex'}if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2)});
 document.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
 document.addEventListener('mousedown',()=>{if(!isMobile)mouseDown=true});
 document.addEventListener('mouseup',()=>{if(!isMobile){mouseDown=false;canShoot=true}});
@@ -616,7 +624,7 @@ for(const p of pickups){miniX.fillStyle='#f7931a';miniX.beginPath();miniX.arc(p.
 document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
 renderer.domElement.addEventListener('click',()=>{if(started&&!isMobile)renderer.domElement.requestPointerLock()});
 document.getElementById('buy-close')?.addEventListener('click',()=>{
-buyPhase=false;const bme=document.getElementById('buy-menu');if(bme)bme.style.display='none';
+buyPhase=false;const bme=document.getElementById('buy-menu');if(bme)bme.style.display='none';try{renderer.domElement.requestPointerLock()}catch(ex){}
 spawnEnemies(4+round*2);spawnPickups(2+round);player.health=100;
 weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35;
 weapons.forEach(w=>{if(w.ammo>0)w.reserve+=w.maxAmmo});
@@ -691,14 +699,14 @@ if(buyPhase){buyTimer-=dt;
 var bte2=document.getElementById('buy-timer');if(bte2)bte2.textContent=Math.ceil(Math.max(0,buyTimer));
 var bme2=document.getElementById('buy-menu');
 if(bme2&&bme2.style.display!=='flex')bme2.style.display='flex';
-if(buyTimer<=0){buyPhase=false;
+if(buyTimer<=0){buyPhase=false;try{renderer.domElement.requestPointerLock()}catch(ex){}
 if(bme2)bme2.style.display='none';
 spawnEnemies(4+round*2);spawnPickups(2+round);
 player.health=100;weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35;
 weapons.forEach(function(ww){if(ww.ammo>0)ww.reserve+=ww.maxAmmo});
 showMessage(MAPS[currentMap%MAPS.length].name+' - ROUND '+round);}}
 // Round
-if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;buyPhase=true;buyTimer=BUY_TIME;const bme=document.getElementById("buy-menu");if(bme)bme.style.display="flex";const bbe=document.getElementById("buy-balance");if(bbe)bbe.textContent=player.sats.toLocaleString();const roundBonus=3000+round*500;player.sats+=roundBonus;addKill("ROUND WON! +"+roundBonus+" sats");const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
+if(enemies.every(e=>e.health<=0)&&!buyPhase){round++;roundWins++;buyPhase=true;buyTimer=BUY_TIME;if(document.exitPointerLock)document.exitPointerLock();const bme=document.getElementById("buy-menu");if(bme)bme.style.display="flex";const bbe=document.getElementById("buy-balance");if(bbe)bbe.textContent=player.sats.toLocaleString();const roundBonus=3000+round*500;player.sats+=roundBonus;addKill("ROUND WON! +"+roundBonus+" sats");const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
 const gunBaseYs=[-.1,-.1,-.1];const reloadDip=reloading?Math.sin((Date.now()-reloadStart)/RELOAD_TIME*Math.PI)*.05:0;activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*.5-reloadDip-activeGun.position.y)*.08;
