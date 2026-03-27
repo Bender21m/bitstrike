@@ -10,26 +10,26 @@ body{background:#000;overflow:hidden;font-family:'Courier New',monospace;touch-a
 canvas{display:block}
 #ui{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:10}
 #hud{position:absolute;bottom:0;left:0;right:0;height:60px;background:rgba(0,0,0,.85);border-top:2px solid #f7931a;display:flex;align-items:center;justify-content:space-around;padding:0 10px;color:#f7931a}
-#hud .stat{text-align:center}#hud .stat .label{font-size:8px;opacity:.7;letter-spacing:1px}#hud .stat .value{font-size:16px;font-weight:bold}
+#hud .stat{text-align:center}#hud .stat .label{font-size:18px;opacity:.7;letter-spacing:1px}#hud .stat .value{font-size:18px;font-weight:bold}
 #crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 #crosshair div{position:absolute;background:rgba(0,255,0,.8)}
 #crosshair .h{width:18px;height:2px;top:-1px}#crosshair .v{height:18px;width:2px;left:-1px}
 #crosshair .h.l{right:6px}#crosshair .h.r{left:6px}#crosshair .v.t{bottom:6px}#crosshair .v.b{top:6px}
 #message{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);color:#f7931a;font-size:36px;font-weight:bold;text-shadow:0 0 20px rgba(247,147,26,.8);opacity:0;transition:opacity .3s;text-align:center}
-#kill-feed{position:absolute;top:10px;right:10px;font-size:11px;text-align:right;max-width:300px}
+#kill-feed{position:absolute;top:10px;right:10px;font-size:18px;text-align:right;max-width:300px}
 #kill-feed div{margin-bottom:4px;color:#f7931a;background:rgba(0,0,0,.6);padding:3px 8px;border-left:2px solid #f7931a}
-#round-info{position:absolute;top:10px;left:50%;transform:translateX(-50%);color:#f7931a;font-size:12px;background:rgba(0,0,0,.7);padding:4px 14px;border:1px solid #f7931a44;border-radius:4px;letter-spacing:1px}
+#round-info{position:absolute;top:10px;left:50%;transform:translateX(-50%);color:#f7931a;font-size:18px;background:rgba(0,0,0,.7);padding:4px 14px;border:1px solid #f7931a44;border-radius:4px;letter-spacing:1px}
 #dmg-overlay{position:absolute;top:0;left:0;right:0;bottom:0;opacity:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(255,0,0,.4));transition:opacity .1s}
 #start-screen{position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,rgba(20,10,0,.95),rgba(0,0,0,.99));display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;z-index:100;pointer-events:auto}
 #start-screen h1{font-size:52px;margin-bottom:5px;text-shadow:0 0 30px rgba(247,147,26,.6);letter-spacing:3px}
-#start-screen .sub{font-size:16px;color:#f7931a88;margin-bottom:8px;font-style:italic}
+#start-screen .sub{font-size:18px;color:#f7931a88;margin-bottom:8px;font-style:italic}
 #start-screen .tagline{font-size:13px;color:#888;margin-bottom:25px}
 .enemies-preview{display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap;justify-content:center;padding:0 20px}
 .enemy-card{background:rgba(247,147,26,.08);border:1px solid #f7931a33;padding:8px 12px;border-radius:8px;text-align:center;min-width:90px}
 .enemy-card .icon{font-size:24px;margin-bottom:3px}
-.enemy-card .ename{font-size:9px;color:#f7931a;font-weight:bold}
-.enemy-card .edesc{font-size:8px;color:#888;margin-top:2px}
-#start-screen .controls{font-size:11px;color:#666;line-height:2;margin-bottom:15px;text-align:center;padding:0 20px}
+.enemy-card .ename{font-size:18px;color:#f7931a;font-weight:bold}
+.enemy-card .edesc{font-size:18px;color:#888;margin-top:2px}
+#start-screen .controls{font-size:18px;color:#666;line-height:2;margin-bottom:15px;text-align:center;padding:0 20px}
 #start-screen .start-btn{font-size:24px;color:#f7931a;cursor:pointer;animation:pulse 1.5s infinite;letter-spacing:2px;pointer-events:auto}
 @keyframes pulse{0%,100%{opacity:1;text-shadow:0 0 20px rgba(247,147,26,.5)}50%{opacity:.6;text-shadow:none}}
 /* Mobile controls */
@@ -38,10 +38,10 @@ canvas{display:block}
 #joystick-zone{left:10px;bottom:70px;width:140px;height:140px}
 #joystick-base{width:110px;height:110px;border-radius:50%;background:rgba(247,147,26,.1);border:2px solid rgba(247,147,26,.25);position:absolute;left:15px;top:15px}
 #joystick-knob{width:45px;height:45px;border-radius:50%;background:rgba(247,147,26,.4);position:absolute;left:47px;top:47px;transform:translate(-50%,-50%)}
-#fire-btn{right:15px;bottom:90px;width:85px;height:85px;border-radius:50%;background:rgba(255,50,50,.25);border:3px solid rgba(255,50,50,.4);display:flex;align-items:center;justify-content:center;font-size:11px;color:#ff5555;font-weight:bold}
-#reload-btn{right:120px;bottom:100px;width:55px;height:55px;border-radius:50%;background:rgba(247,147,26,.15);border:2px solid rgba(247,147,26,.3);display:flex;align-items:center;justify-content:center;font-size:10px;color:#f7931a;font-weight:bold}
+#fire-btn{right:15px;bottom:90px;width:85px;height:85px;border-radius:50%;background:rgba(255,50,50,.25);border:3px solid rgba(255,50,50,.4);display:flex;align-items:center;justify-content:center;font-size:18px;color:#ff5555;font-weight:bold}
+#reload-btn{right:120px;bottom:100px;width:55px;height:55px;border-radius:50%;background:rgba(247,147,26,.15);border:2px solid rgba(247,147,26,.3);display:flex;align-items:center;justify-content:center;font-size:18px;color:#f7931a;font-weight:bold}
 #weapon-btns{right:15px;bottom:185px;display:flex;flex-direction:column;gap:6px}
-.weapon-btn{width:45px;height:30px;border-radius:6px;background:rgba(247,147,26,.1);border:1px solid rgba(247,147,26,.25);display:flex;align-items:center;justify-content:center;font-size:8px;color:#f7931a;font-weight:bold;pointer-events:auto}
+.weapon-btn{width:45px;height:30px;border-radius:6px;background:rgba(247,147,26,.1);border:1px solid rgba(247,147,26,.25);display:flex;align-items:center;justify-content:center;font-size:18px;color:#f7931a;font-weight:bold;pointer-events:auto}
 .weapon-btn.active{background:rgba(247,147,26,.35);border-color:#f7931a}
 #minimap{position:absolute;top:10px;left:10px;width:100px;height:100px;border:1px solid #f7931a55;background:rgba(0,0,0,.7);border-radius:4px}
 #minimap canvas{width:100%;height:100%}
@@ -72,11 +72,11 @@ canvas{display:block}
 <div class="weapon-btn" data-w="2">SAB</div>
 </div>
 </div>
-<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:12px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">AK-₿7</div><div style="font-size:11px;color:#888">Full auto</div><div style="font-size:14px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">₿EAGLE</div><div style="font-size:11px;color:#888">Pistol</div><div style="font-size:14px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:12px 18px;border-radius:8px;text-align:center;min-width:120px;pointer-events:auto"><div style="font-size:16px;font-weight:bold">SA₿OT</div><div style="font-size:11px;color:#888">Sniper</div><div style="font-size:14px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:16px;font-weight:bold">ARMOR</div><div style="font-size:14px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:12px 18px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:16px;font-weight:bold">HELMET</div><div style="font-size:14px;color:#4a4">350 sats</div></div></div><div style="font-size:11px;color:#666">Press B to close</div></div>
+<div id="buy-menu" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:90;flex-direction:column;align-items:center;justify-content:center;color:#f7931a;font-family:Courier New,monospace"><h2 style="font-size:28px;margin-bottom:5px">₿UY MENU</h2><div style="font-size:18px;color:#888;margin-bottom:15px">Round starts in <span id="buy-timer">10</span>s | Balance: <span id="buy-balance">0</span> sats</div><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="ak" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">AK-₿7</div><div style="font-size:18px;color:#888">Full auto</div><div style="font-size:18px;color:#f7931a">2,700 sats</div></div><div class="buy-item" data-item="deagle" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">₿EAGLE</div><div style="font-size:18px;color:#888">Pistol</div><div style="font-size:18px;color:#f7931a">700 sats</div></div><div class="buy-item" data-item="awp" style="cursor:pointer;background:rgba(247,147,26,.1);border:1px solid #f7931a44;padding:16px 22px;border-radius:8px;text-align:center;min-width:140px;pointer-events:auto"><div style="font-size:18px;font-weight:bold">SA₿OT</div><div style="font-size:18px;color:#888">Sniper</div><div style="font-size:18px;color:#f7931a">4,750 sats</div></div></div><div style="display:flex;gap:15px;justify-content:center;margin-bottom:15px"><div class="buy-item" data-item="armor" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">ARMOR</div><div style="font-size:18px;color:#4a4">1,000 sats</div></div><div class="buy-item" data-item="helmet" style="cursor:pointer;background:rgba(100,200,100,.1);border:1px solid #4a4;padding:16px 22px;border-radius:8px;text-align:center;pointer-events:auto"><div style="font-size:18px;font-weight:bold">HELMET</div><div style="font-size:18px;color:#4a4">350 sats</div></div></div><div style="font-size:18px;color:#666">CLICK a weapon to buy it<br><br><div id="buy-close" style="cursor:pointer;background:#f7931a;color:#000;padding:12px 30px;border-radius:8px;font-size:20px;font-weight:bold;pointer-events:auto;display:inline-block">START ROUND</div></div></div>
 <div id="start-screen">
 <h1>₿ITSTRIKE</h1>
 <div class="sub">Stack Sats. Shoot Fiat.</div>
-<div class="tagline">v2.0 — Now in actual 3D<br><span style="font-size:10px;color:#666">Music: WEBFIVE by Zazawowow</span></div>
+<div class="tagline">v2.0 — Now in actual 3D<br><span style="font-size:18px;color:#666">Music: WEBFIVE by Zazawowow</span></div>
 <div class="enemies-preview">
 <div class="enemy-card"><div class="icon">🏦</div><div class="ename">EVIL BANKER</div><div class="edesc">Prints money, steals yours</div></div>
 <div class="enemy-card"><div class="icon">🪙</div><div class="ename">SHITCOINER</div><div class="edesc">"Have you heard of SOL?"</div></div>
@@ -590,6 +590,13 @@ for(const p of pickups){miniX.fillStyle='#f7931a';miniX.beginPath();miniX.arc(p.
 // ===== START =====
 document.getElementById('start-btn').addEventListener('click',()=>{document.getElementById('start-screen').style.display='none';if(!isMobile)renderer.domElement.requestPointerLock();initAudio();started=true;spawnEnemies(5);spawnPickups(3);showMessage('ROUND 1 — HODL OR DIE')});
 renderer.domElement.addEventListener('click',()=>{if(started&&!isMobile)renderer.domElement.requestPointerLock()});
+document.getElementById('buy-close')?.addEventListener('click',()=>{
+buyPhase=false;const bme=document.getElementById('buy-menu');if(bme)bme.style.display='none';
+spawnEnemies(4+round*2);spawnPickups(2+round);player.health=100;
+weapons[1].ammo=weapons[1].maxAmmo;weapons[1].reserve=35;
+weapons.forEach(w=>{if(w.ammo>0)w.reserve+=w.maxAmmo});
+showMessage(MAPS[currentMap%MAPS.length].name+' — FIGHT!');
+});
 document.querySelectorAll('.buy-item').forEach(el=>{el.addEventListener('click',()=>{const item=el.dataset.item;const price=WEAPON_PRICES[item];if(player.sats>=price){player.sats-=price;if(item==='ak'){switchWeapon(0);weapons[0].ammo=weapons[0].maxAmmo;weapons[0].reserve=90}else if(item==='deagle'){switchWeapon(1);weapons[1].ammo=weapons[1].maxAmmo}else if(item==='awp'){switchWeapon(2);weapons[2].ammo=weapons[2].maxAmmo}else if(item==='armor'){player.armor=100}else if(item==='helmet'){player.helmet=true}const bbe2=document.getElementById('buy-balance');if(bbe2)bbe2.textContent=player.sats.toLocaleString();playSound('sats')}})});
 
 // ===== GAME LOOP =====
@@ -689,7 +696,7 @@ const mapSelectEl=document.getElementById('map-select');
 if(mapSelectEl){MAPS.forEach((m,i)=>{
 const btn=document.createElement('div');
 btn.textContent=m.name;
-btn.style.cssText='cursor:pointer;padding:6px 12px;border-radius:6px;font-size:11px;border:1px solid #f7931a44;background:rgba(247,147,26,.08);color:#f7931a;pointer-events:auto;min-width:80px;text-align:center';
+btn.style.cssText='cursor:pointer;padding:6px 12px;border-radius:6px;font-size:18px;border:1px solid #f7931a44;background:rgba(247,147,26,.08);color:#f7931a;pointer-events:auto;min-width:80px;text-align:center';
 btn.dataset.idx=i;
 if(i===0)btn.style.background='rgba(247,147,26,.3)';
 btn.addEventListener('click',()=>{
@@ -701,13 +708,13 @@ mapSelectEl.appendChild(btn);
 })}
 
 let _fc=0,_ft=Date.now();function animate(){const dt=Math.min(clock.getDelta(),.05);
-_fc++;if(Date.now()-_ft>2000){const d=document.getElementById("debug");if(d)d.innerHTML="FPS: "+Math.round(_fc/2)+" | Enemies: "+enemies.filter(e=>e.health>0).length+" | Round: "+round+" | Map: "+(MAPS[currentMap]?.name||"?");_fc=0;_ft=Date.now()}try{update(dt)}catch(err){console.error('UPDATE:',err.message,'at',err.stack?.split('\n')[1])}
+_fc++;if(Date.now()-_ft>2000){const d=document.getElementById("debug");if(d)d.innerHTML="FPS: "+Math.round(_fc/2)+" | Enemies: "+enemies.filter(e=>e.health>0).length+" | Round: "+round+" | Map: "+(MAPS[currentMap]?.name||"?")+" | Errs: "+(_errCount||0);_fc=0;_ft=Date.now()}try{update(dt)}catch(err){console.error('UPDATE:',err.message,'at',err.stack?.split('\n')[1])}
 try{
 // Render main scene
 renderer.autoClear=true;renderer.render(scene,camera);}catch(err){console.error("RENDER:",err.message)}
 // Weapons are attached to camera, rendered in main scene
 requestAnimationFrame(animate)}
-window.onerror=function(msg,src,line,col,err){
+let _errCount=0;window.onerror=function(msg,src,line,col,err){_errCount++;
 const d=document.getElementById('debug');
 if(d)d.innerHTML='<span style="color:red">ERR: '+msg+'<br>Line: '+line+'</span>';
 console.error('GAME ERROR:',msg,'line:',line,'col:',col);};
