@@ -129,7 +129,7 @@ scene.fog=new THREE.FogExp2(0x0a0a15,.06);
 const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,.1,100);
 camera.position.set(2.5,.8,2.5);
 
-window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();weaponCam.aspect=camera.aspect;weaponCam.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
 
 // ===== LIGHTING =====
 const ambient=new THREE.AmbientLight(0x334455,.3);scene.add(ambient);
@@ -289,7 +289,7 @@ const ch=new THREE.Mesh(new THREE.BoxGeometry(.008,.008,.015),steel);ch.position
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.022,.022),btcMat);btc.position.set(.022,.005,-.06);g.add(btc);
 // Sling mount
 const sling=new THREE.Mesh(new THREE.TorusGeometry(.006,.0015,4,6,Math.PI),steel);sling.position.set(0,-.025,.17);sling.rotation.x=Math.PI/2;g.add(sling);
-g.position.set(.25,-.22,-.35);g.rotation.set(0,.06,0);
+g.scale.set(3,3,3);g.position.set(.3,-.35,-.6);g.rotation.set(0,.06,0);
 }else if(type===1){
 // ===== DESERT EAGLE =====
 // Slide (massive, iconic angular shape)
@@ -335,7 +335,7 @@ const ss=new THREE.Mesh(new THREE.BoxGeometry(.003,.008,.012),steel);ss.position
 const btc=new THREE.Mesh(new THREE.BoxGeometry(.001,.018,.018),btcMat);btc.position.set(.02,.015,-.08);g.add(btc);
 // Ejection port
 const ep=new THREE.Mesh(new THREE.BoxGeometry(.001,.012,.025),new THREE.MeshStandardMaterial({color:0x050505}));ep.position.set(.02,.02,-.06);g.add(ep);
-g.position.set(.18,-.24,-.3);g.rotation.set(0,.04,0);
+g.scale.set(3,3,3);g.position.set(.22,-.38,-.5);g.rotation.set(0,.04,0);
 }else{
 // ===== AWP / SNIPER =====
 // Receiver (long action)
@@ -592,8 +592,8 @@ if(Math.hypot(p.x-player.x,p.z-player.z)<.6){player.sats+=p.sats;showMessage('+'
 if(enemies.every(e=>e.health<=0)){round++;const rn=ROUND_NAMES[Math.min(round-1,ROUND_NAMES.length-1)];showMessage('ROUND '+round+' — '+rn);playSound('round');document.getElementById('round-info').textContent='ROUND '+round+' — '+rn;spawnEnemies(4+round*2);spawnPickups(2+round);player.health=Math.min(100,player.health+25);weapons.forEach(w=>w.reserve+=w.maxAmmo)}
 // Weapon viewmodel animation
 const bob2=Math.sin(bobPhase)*.01*bobAmt*100;
-activeGun.position.y=activeGun.position.y*.9+(activeGun.userData.baseY||activeGun.position.y)+bob2;
-activeGun.rotation.x=recoilPitch*2;
+const gunBaseYs=[-.35,-.38,-.38];activeGun.position.y+=(gunBaseYs[curWeapon]+bob2*5-activeGun.position.y)*.15;
+activeGun.rotation.x=recoilPitch*5;
 // HUD
 document.getElementById('health').textContent=Math.max(0,player.health);
 document.getElementById('health').style.color=player.health>50?'#0f0':player.health>25?'#ff0':'#f00';
@@ -612,7 +612,13 @@ update(dt);
 // Render main scene
 renderer.autoClear=true;renderer.render(scene,camera);
 // Render weapon overlay
-if(started&&!gameOver){renderer.autoClear=false;renderer.clearDepth();renderer.render(weaponScene,weaponCam)}
+if(started&&!gameOver){
+renderer.autoClear=false;
+renderer.clearDepth();
+weaponCam.aspect=camera.aspect;
+weaponCam.updateProjectionMatrix();
+renderer.render(weaponScene,weaponCam);}
+renderer.autoClear=true;
 requestAnimationFrame(animate)}
 animate();
 </script>
