@@ -556,7 +556,7 @@ muzzleFlash=3;muzzleLight.intensity=3;
 recoilPitch=w.recoilAmt+sprayY;screenShake=w.recoilAmt*30;player.angle+=sprayX;
 playSound(w.sndType);
 const hit=shootRay();
-if(!hit){const dir2=new THREE.Vector3(0,0,-1);dir2.applyQuaternion(camera.quaternion);const ray2=new THREE.Raycaster(camera.position,dir2,0,50);const wh2=ray2.intersectObjects(wallGroup.children,false);if(wh2.length>=2&&wh2[1].distance-wh2[0].distance<1.5){for(const e of enemies){if(e.health<=0)continue;const toE2=new THREE.Vector3(e.x-camera.position.x,.6-camera.position.y,e.z-camera.position.z);const dot2=toE2.dot(dir2);if(dot2>wh2[1].distance&&dot2<wh2[1].distance+10){const perp2=toE2.clone().sub(dir2.clone().multiplyScalar(dot2)).length();if(perp2<.6){e.health-=w.damage*.4;e.hit=10;playSound("hit");if(e.health<=0){player.kills++;const et2=ENEMY_TYPES[e.type];player.sats+=et2.reward;addKill("WALLBANG! "+et2.deathMsgs[Math.floor(Math.random()*et2.deathMsgs.length)]+" +"+et2.reward);playSound("kill");scene.remove(e.mesh)}break}}}}}
+/* wallbang disabled */
 if(hit){hit.health-=w.damage;hit.hit=10;playSound('hit');
 // Flash enemy red
 hit.mesh.children.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setHex(0xff0000)});
@@ -661,21 +661,20 @@ drawMinimap()}
 
 
 function loadMap(idx){
-currentMap=idx%MAPS.length;
-const m=MAPS[currentMap];
-map=m.map;
+currentMap=idx%MAPS.length;const m=MAPS[currentMap];map=m.map;
+// Theme colors
 scene.background=new THREE.Color(m.sky);
-scene.fog=new THREE.FogExp2(m.fog,m.fogD);
-// Rebuild walls
-wallGroup.clear();
-const wMat=new THREE.MeshStandardMaterial({color:m.wall,roughness:.9,metalness:.1});
-const wGeo=new THREE.BoxGeometry(1,2,1);
-for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(map[y*MW+x]===1){const w=new THREE.Mesh(wGeo,wMat);w.position.set(x+.5,1,y+.5);w.castShadow=true;w.receiveShadow=true;wallGroup.add(w)}}
-// Update floor/ceiling colors
-floor.material.color.setHex(m.floor);
-ceil.material.color.setHex(m.ceil);
-player.x=2.5;player.z=2.5;player.angle=0;player.pitch=0;
-document.getElementById('round-info').textContent=m.name+' | ROUND '+round+' | W:'+roundWins;
+scene.fog.color.setHex(m.fog);scene.fog.density=m.fogD*.6;
+// Lighting
+ambient.color.setHex(m.wall);ambient.intensity=.6;
+btcLight.color.setHex(m.wall);btcLight.intensity=1;
+btcLight2.color.setHex(m.wall);btcLight2.intensity=.7;
+// Rebuild walls with themed material
+while(wallGroup.children.length>0)wallGroup.remove(wallGroup.children[0]);
+const wMat=new THREE.MeshStandardMaterial({color:m.wall,roughness:.8,metalness:.15,emissive:new THREE.Color(m.wall),emissiveIntensity:.08});
+for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(map[y*MW+x]===1){const wl=new THREE.Mesh(new THREE.BoxGeometry(1,2,1),wMat);wl.position.set(x+.5,1,y+.5);wl.castShadow=true;wl.receiveShadow=true;wallGroup.add(wl)}}
+floor.material.color.setHex(m.floor);ceil.material.color.setHex(m.ceil);
+player.x=2.5;player.z=2.5;player.angle=0;player.pitch=0;document.getElementById('round-info').textContent=m.name+' | ROUND '+round+' | W:'+roundWins;
 }
 
 // Populate map selector
