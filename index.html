@@ -259,7 +259,10 @@ const weapons=[
 {name:'₿EAGLE',ammo:7,maxAmmo:7,reserve:35,damage:55,fireRate:400,auto:false,spread:.015,recoilAmt:.1,sndType:'shoot_pistol'},
 {name:'SA₿OT',ammo:5,maxAmmo:5,reserve:20,damage:120,fireRate:800,auto:false,spread:.003,recoilAmt:.15,sndType:'shoot_sniper'}];
 let curWeapon=0,lastShot=0,reloading=false,reloadStart=0,RELOAD_TIME=2000,canShoot=true;
-let recoilPitch=0;
+let recoilPitch=0,sprayIdx=0,sprayReset=0;
+const SPRAY_AK=[0,-.01,-.02,-.03,-.035,-.04,-.042,-.044,-.04,-.035,-.03,-.025,-.02,-.015,-.01,-.005,0,.005,.01,.015,.02,.015,.01,.005,0,-.005,-.01,-.015,-.01,-.005];
+const SPRAY_DEG=[0,-.03,-.01,0,0,0,0];
+const SPRAY_AWP=[0,-.08];
 
 // Weapon viewmodel (3D)
 // Weapon is attached directly to camera
@@ -549,7 +552,7 @@ return closest}
 function shoot(){const w=weapons[curWeapon],now=Date.now();if(reloading||w.ammo<=0||now-lastShot<w.fireRate)return;if(!w.auto&&!canShoot)return;
 lastShot=now;w.ammo--;if(!w.auto)canShoot=false;
 muzzleFlash=3;muzzleLight.intensity=3;
-recoilPitch=w.recoilAmt;screenShake=w.recoilAmt*30;
+recoilPitch=w.recoilAmt+sprayY;screenShake=w.recoilAmt*30;player.angle+=sprayX;
 playSound(w.sndType);
 const hit=shootRay();
 if(!hit){const dir2=new THREE.Vector3(0,0,-1);dir2.applyQuaternion(camera.quaternion);const ray2=new THREE.Raycaster(camera.position,dir2,0,50);const wh2=ray2.intersectObjects(wallGroup.children,false);if(wh2.length>=2&&wh2[1].distance-wh2[0].distance<1.5){for(const e of enemies){if(e.health<=0)continue;const toE2=new THREE.Vector3(e.x-camera.position.x,.6-camera.position.y,e.z-camera.position.z);const dot2=toE2.dot(dir2);if(dot2>wh2[1].distance&&dot2<wh2[1].distance+10){const perp2=toE2.clone().sub(dir2.clone().multiplyScalar(dot2)).length();if(perp2<.6){e.health-=w.damage*.4;e.hit=10;playSound("hit");if(e.health<=0){player.kills++;const et2=ENEMY_TYPES[e.type];player.sats+=et2.reward;addKill("WALLBANG! "+et2.deathMsgs[Math.floor(Math.random()*et2.deathMsgs.length)]+" +"+et2.reward);playSound("kill");scene.remove(e.mesh)}break}}}}}
@@ -607,7 +610,7 @@ camera.rotation.x=player.pitch+recoilPitch+(Math.random()-.5)*screenShake*.01;
 muzzleLight.position.copy(camera.position);
 if(muzzleFlash>0){muzzleFlash--;muzzleLight.intensity*=.6}else muzzleLight.intensity=0;
 // Shoot
-if(mouseDown||fireActive)shoot();
+if(mouseDown||fireActive)shoot();else if(Date.now()-sprayReset>300)sprayIdx=0;
 // Reload
 if(reloading&&Date.now()-reloadStart>RELOAD_TIME){const w=weapons[curWeapon],need=w.maxAmmo-w.ammo,give=Math.min(need,w.reserve);w.ammo+=give;w.reserve-=give;reloading=false}
 // Enemies
