@@ -410,6 +410,8 @@ const ENEMY_TYPES={
 banker:{name:'EVIL BANKER',color:0x6a6a80,hp:60,speed:.018,damage:12,reward:5000,taunts:['Money printer go brrr!','You need a license!','CBDC when?','Inflation is transitory!'],deathMsgs:['Bank run!','Bailout denied','Fractional reserve THAT']},
 shitcoiner:{name:'SHITCOINER',color:0x9932cc,hp:40,speed:.025,damage:8,reward:3000,taunts:['ETH has smart contracts!','SOL is so fast!','Check my NFT!','Bitcoin is boomer tech!'],deathMsgs:['Rug pulled!','Exit scam complete','Back to zero']},
 bear:{name:'FUD BEAR',color:0xb44040,hp:50,speed:.02,damage:10,reward:4000,taunts:['Bitcoin is dead!','Tulip mania!','Going to zero!','Sell now!'],deathMsgs:['FUD destroyed!','Bear liquidated','Short squeezed']},
+roger:{name:'ROGER VER',color:0x00aa00,hp:45,speed:.028,damage:8,reward:6000,taunts:['Bitcoin Cash is the real Bitcoin!','BCH fees are lower!','Read the whitepaper!','I was the first Bitcoin investor!','Blockstream ruined Bitcoin!'],deathMsgs:['Bcash busted!','Ver-y dead','Fork off Roger!']},
+adam:{name:'ADAM BACK',color:0x4488cc,hp:120,speed:.012,damage:18,reward:8000,taunts:['Hashcash was first!','I invented proof of work!','Check my PGP key!','Have you read my CV?'],deathMsgs:['Hashcash crushed!','Back down!','OG defeated']},
 satoshi:{name:'SATOSHI',color:0x111111,hp:150,speed:.03,damage:15,reward:21000000,taunts:['...','If you dont believe me or dont understand, I dont have time to try to convince you.','Running Bitcoin.','Chancellor on brink of second bailout for banks.'],deathMsgs:['You found Satoshi!','The creator falls...','Was it really him?']},
 fed:{name:'FED CHAIRMAN',color:0x3a3a55,hp:200,speed:.012,damage:25,reward:21000,taunts:['Inflation is transitory!','We have the tools!','Not QE!','Trust the process!'],deathMsgs:['THE FED IS DEAD','Audit complete','End the Fed!']}};
 
@@ -434,6 +436,18 @@ const eyeGeo=new THREE.SphereGeometry(.04,12,20);const eyeMat=new THREE.MeshStan
 const eyeL=new THREE.Mesh(eyeGeo,eyeMat);eyeL.position.set(-.07,bodyH+.38,-.15);g.add(eyeL);
 const eyeR=new THREE.Mesh(eyeGeo,eyeMat);eyeR.position.set(.07,bodyH+.38,-.15);g.add(eyeR);
 // Banker tie
+if(type==='roger'){// Roger Ver - green BCH suit, slicked hair
+const hair=new THREE.Mesh(new THREE.SphereGeometry(.19,16,16,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:.6}));hair.position.y=bodyH+.45;g.add(hair);
+const bch=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.01,20),new THREE.MeshStandardMaterial({color:0x8dc351,emissive:0x8dc351,emissiveIntensity:.3}));bch.position.set(0,bodyH*.5,-.16);g.add(bch);
+}
+if(type==='adam'){// Adam Back - blue suit, glasses, stocky
+const glasses=new THREE.Group();const lensGeo=new THREE.TorusGeometry(.05,.01,8,16);const lensMat=new THREE.MeshStandardMaterial({color:0x222222,roughness:.3,metalness:.5});
+const lensL=new THREE.Mesh(lensGeo,lensMat);lensL.position.set(-.08,bodyH+.38,-.18);glasses.add(lensL);
+const lensR=lensL.clone();lensR.position.x=.08;glasses.add(lensR);
+const bridge=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.08,8),lensMat);bridge.rotation.z=Math.PI/2;bridge.position.set(0,bodyH+.38,-.18);glasses.add(bridge);g.add(glasses);
+// Hashcash armor plate
+const armor=new THREE.Mesh(new THREE.BoxGeometry(bodyW*.8,.3,.05),new THREE.MeshStandardMaterial({color:0x88aadd,roughness:.3,metalness:.7}));armor.position.set(0,bodyH*.5,-.17);g.add(armor);
+}
 if(type==='satoshi'){// Predator cloak - make all meshes transparent
 g.traverse(child=>{if(child.isMesh){child.material=child.material.clone();child.material.transparent=true;child.material.opacity=0.08;child.material.emissive=new THREE.Color(0x00ffff);child.material.emissiveIntensity=0.15}});
 const cloak=new THREE.PointLight(0x00ffff,.15,2);cloak.position.y=.8;g.add(cloak)}
@@ -447,7 +461,7 @@ return g}
 function spawnEnemies(n){
 enemies.forEach(e=>{if(e.mesh)scene.remove(e.mesh)});enemies=[];
 for(let i=0;i<n;i++){let x,z;do{x=Math.floor(Math.random()*(MW-2))+1+.5;z=Math.floor(Math.random()*(MH-2))+1+.5}while(map[Math.floor(z)*MW+Math.floor(x)]!==0||Math.hypot(x-player.x,z-player.z)<5);
-const types=['banker','shitcoiner','bear'];const type=(round>=5&&Math.random()<.15)?'fed':types[Math.floor(Math.random()*3)];
+const types=['banker','shitcoiner','bear','roger','adam'];const type=(round>=5&&Math.random()<.15)?'fed':types[Math.floor(Math.random()*3)];
 const et=ENEMY_TYPES[type];const mesh=createEnemyMesh(type);mesh.position.set(x,0,z);scene.add(mesh);
 enemies.push({x,z,health:et.hp+round*8,maxHealth:et.hp+round*8,speed:et.speed+round*.002,type,mesh,lastAttack:0,lastTaunt:0,hit:0})}}
 
@@ -591,7 +605,9 @@ e.mesh.rotation.y=ang;
 // Taunt
 if(dist<8&&now-e.lastTaunt>5000+Math.random()*5000){e.lastTaunt=now;const et=ENEMY_TYPES[e.type]}
 // Move toward player
-if(dist>.8){const spd2=e.speed*dt*60;
+if(dist>.8){let spd2=e.speed*dt*60;
+// Roger Ver sometimes runs away (switching teams)
+if(e.type==='roger'&&Math.sin(now*.001)>.7){spd2=-spd2*.5}
 const emx=(dx/dist)*spd2,emz=(dz/dist)*spd2;
 if(map[Math.floor(e.z)*MW+Math.floor(e.x+emx+Math.sign(emx)*.3)]===0)e.x+=emx;
 if(map[Math.floor(e.z+emz+Math.sign(emz)*.3)*MW+Math.floor(e.x)]===0)e.z+=emz;
