@@ -197,104 +197,157 @@ const ROUND_NAMES=['HODL OR DIE','STACK SATS','NO RETREAT','BUY THE DIP','DIAMON
 // ===== WEAPON DRAWING =====
 function drawWeapon(bob){
 const w=weapons[curWeapon];
-// Smooth recoil recovery
 recoilY*=1-w.recoilSpeed;recoilRot*=1-w.recoilSpeed;screenShake*=.85;
-// Walk sway
 const sway=Math.sin(bobPhase*.5)*bobAmt*.3;
 weaponSwayX+=(sway-weaponSwayX)*.1;
 weaponSwayY+=(Math.abs(Math.sin(bobPhase))*bobAmt*.2-weaponSwayY)*.1;
-const baseX=W*.55+weaponSwayX,baseY=H*.65+weaponSwayY+recoilY+bob*.3;
-const rot=recoilRot*.01;
+// Position: bottom-right of screen, gun pointing UP/FORWARD
+const baseX=W*.65+weaponSwayX;
+const baseY=H*.85+weaponSwayY+recoilY+bob*.3;
 ctx.save();
 ctx.translate(baseX,baseY);
-ctx.rotate(rot);
-if(curWeapon===0)drawAK(0,0);
-else if(curWeapon===1)drawDeagle(0,0);
-else drawSabot(0,0);
+// Rotate so gun points up-left (toward crosshair)
+ctx.rotate(-0.4+recoilRot*.015);
+if(curWeapon===0)drawAK();
+else if(curWeapon===1)drawDeagle();
+else drawSabot();
 ctx.restore();
-// Muzzle flash on weapon
-if(muzzleFlash>0){const mfx=curWeapon===2?baseX-80:curWeapon===1?baseX-40:baseX-60;
-const mfy=baseY-80+recoilY;const mfs=muzzleFlash/4;
+// Muzzle flash at barrel tip (toward center-top of screen)
+if(muzzleFlash>0){
+const mfs=muzzleFlash/4;
+const mfx=baseX-120,mfy=baseY-180;
 ctx.save();ctx.globalCompositeOperation='lighter';
-ctx.fillStyle='rgba(255,200,50,'+mfs*.8+')';ctx.beginPath();ctx.arc(mfx,mfy,20+Math.random()*15,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='rgba(255,255,200,'+mfs+')';ctx.beginPath();ctx.arc(mfx,mfy,8+Math.random()*5,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='rgba(255,200,50,'+mfs*.7+')';ctx.beginPath();ctx.arc(mfx,mfy,25+Math.random()*20,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='rgba(255,255,200,'+mfs+')';ctx.beginPath();ctx.arc(mfx,mfy,10+Math.random()*8,0,Math.PI*2);ctx.fill();
 ctx.restore()}}
 
-function drawAK(x,y){
-// AK-47 style — angled, held from right side
-const s=isMobile?.7:1;ctx.scale(s,s);
-// Stock
-ctx.fillStyle='#5a3a1a';ctx.fillRect(60,20,80,14);ctx.fillRect(120,14,30,20);
-// Body/receiver
-ctx.fillStyle='#3a3a3a';ctx.fillRect(-20,10,100,18);
-// Barrel
-ctx.fillStyle='#2a2a2a';ctx.fillRect(-120,12,100,8);ctx.fillRect(-130,10,15,12);// muzzle brake
-// Gas tube above barrel
-ctx.fillStyle='#4a3520';ctx.fillRect(-80,6,60,6);
-// Magazine — curved
-ctx.fillStyle='#4a3a2a';ctx.beginPath();ctx.moveTo(20,28);ctx.lineTo(30,28);ctx.lineTo(35,75);ctx.lineTo(15,75);ctx.closePath();ctx.fill();
+function drawAK(){
+const s=isMobile?.6:.85;ctx.scale(s,s);
+// Gun pointing upward (barrel going up-left from grip at bottom-right)
+// Grip (bottom, where hand holds)
+ctx.fillStyle='#5a3a1a';
+ctx.fillRect(-8,0,20,50);
+// Stock extending down-right
+ctx.fillStyle='#5a3a1a';
+ctx.fillRect(5,30,60,16);ctx.fillRect(55,25,25,22);
 // Trigger guard
-ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.beginPath();ctx.arc(45,35,10,0,Math.PI);ctx.stroke();
-// Bitcoin logo on stock
-ctx.fillStyle='#f7931a';ctx.font='bold 14px Arial';ctx.fillText('₿',135,30);
-// Grip
-ctx.fillStyle='#3a2a1a';ctx.fillRect(50,28,12,30);
-// Sight
-ctx.fillStyle='#222';ctx.fillRect(-90,4,4,8);ctx.fillRect(10,2,4,10);
+ctx.fillStyle='#333';ctx.strokeStyle='#444';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(5,15,8,0,Math.PI);ctx.stroke();
+// Receiver body going up
+ctx.fillStyle='#3a3a3a';
+ctx.fillRect(-15,-80,24,90);
+// Magazine (curved, iconic AK mag)
+ctx.fillStyle='#4a3a2a';
+ctx.beginPath();ctx.moveTo(8,-50);ctx.lineTo(18,-50);ctx.lineTo(28,-10);ctx.lineTo(14,-10);ctx.closePath();ctx.fill();
+// Barrel going up
+ctx.fillStyle='#2a2a2a';
+ctx.fillRect(-10,-200,14,125);
+// Muzzle brake
+ctx.fillStyle='#222';
+ctx.fillRect(-12,-210,18,15);
+// Gas tube (wood handguard)
+ctx.fillStyle='#6b4420';
+ctx.fillRect(-6,-160,10,60);
+// Front sight
+ctx.fillStyle='#222';
+ctx.fillRect(-7,-215,4,10);
+// Rear sight
+ctx.fillStyle='#222';
+ctx.fillRect(-7,-85,4,8);
+// Bitcoin logo on receiver
+ctx.fillStyle='#f7931a';ctx.font='bold 16px Arial';
+ctx.save();ctx.translate(0,-40);ctx.fillText('₿',0,0);ctx.restore();
 ctx.setTransform(1,0,0,1,0,0)}
 
-function drawDeagle(x,y){
-const s=isMobile?.7:1;ctx.scale(s,s);
-// Desert Eagle / ₿EAGLE
-// Slide (top)
-ctx.fillStyle='#c0c0c0';ctx.fillRect(-60,-5,120,20);
+function drawDeagle(){
+const s=isMobile?.6:.85;ctx.scale(s,s);
+// Desert Eagle pointing up
+// Grip
+ctx.fillStyle='#2a2a2a';
+ctx.beginPath();ctx.moveTo(-10,0);ctx.lineTo(15,0);ctx.lineTo(20,55);ctx.lineTo(-15,55);ctx.closePath();ctx.fill();
+// Grip texture
+ctx.strokeStyle='#444';ctx.lineWidth=1;
+for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(-8,10+i*8);ctx.lineTo(12,10+i*8);ctx.stroke()}
+// Frame
+ctx.fillStyle='#888';
+ctx.fillRect(-12,-40,28,45);
+// Slide (top part, chrome)
+ctx.fillStyle='#c0c0c0';
+ctx.fillRect(-14,-140,30,105);
 // Barrel
-ctx.fillStyle='#aaa';ctx.fillRect(-100,-2,45,14);ctx.fillRect(-105,0,8,10);
-// Frame (lower)
-ctx.fillStyle='#888';ctx.fillRect(-40,15,90,12);
-// Grip
-ctx.fillStyle='#2a2a2a';ctx.beginPath();ctx.moveTo(20,27);ctx.lineTo(35,27);ctx.lineTo(50,70);ctx.lineTo(15,70);ctx.closePath();ctx.fill();
-// Grip texture lines
-ctx.strokeStyle='#444';ctx.lineWidth=1;for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(22,35+i*7);ctx.lineTo(42,35+i*7+4);ctx.stroke()}
+ctx.fillStyle='#aaa';
+ctx.fillRect(-10,-180,20,45);
+// Muzzle
+ctx.fillStyle='#999';
+ctx.fillRect(-8,-185,16,8);
+// Front sight (red dot)
+ctx.fillStyle='#ff3333';
+ctx.fillRect(-2,-188,4,5);
+// Rear sight
+ctx.fillStyle='#222';
+ctx.fillRect(-8,-140,5,6);ctx.fillRect(7,-140,5,6);
 // Trigger
-ctx.strokeStyle='#555';ctx.lineWidth=2;ctx.beginPath();ctx.arc(10,30,8,-.3,Math.PI*.8);ctx.stroke();
-// Magazine
-ctx.fillStyle='#666';ctx.fillRect(22,27,10,15);
+ctx.strokeStyle='#555';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(0,-5,6,0,Math.PI*.7);ctx.stroke();
+// Hammer
+ctx.fillStyle='#777';
+ctx.fillRect(10,-45,6,12);
 // Bitcoin engraving
-ctx.fillStyle='#f7931a';ctx.font='bold 12px Arial';ctx.fillText('₿',55,12);
-// Sight
-ctx.fillStyle='#ff3333';ctx.fillRect(-55,-8,3,5);
-ctx.fillStyle='#222';ctx.fillRect(40,-8,3,5);
+ctx.fillStyle='#f7931a';ctx.font='bold 14px Arial';
+ctx.save();ctx.translate(2,-90);ctx.fillText('₿',0,0);ctx.restore();
 ctx.setTransform(1,0,0,1,0,0)}
 
-function drawSabot(x,y){
-const s=isMobile?.65:1;ctx.scale(s,s);
-// Sniper / SA₿OT
-// Long barrel
-ctx.fillStyle='#2a2a2a';ctx.fillRect(-180,8,160,10);
-ctx.fillStyle='#333';ctx.fillRect(-190,6,15,14);// muzzle
-// Scope
-ctx.fillStyle='#1a1a1a';ctx.fillRect(-100,-12,80,14);
-ctx.fillStyle='#111';ctx.beginPath();ctx.arc(-100,-5,7,0,Math.PI*2);ctx.fill();
-ctx.beginPath();ctx.arc(-20,-5,7,0,Math.PI*2);ctx.fill();
-// Scope lens glint
-ctx.fillStyle='rgba(100,150,255,.3)';ctx.beginPath();ctx.arc(-100,-5,5,0,Math.PI*2);ctx.fill();
-// Body
-ctx.fillStyle='#3a3a3a';ctx.fillRect(-20,5,100,20);
-// Bolt
-ctx.fillStyle='#555';ctx.fillRect(30,5,15,8);ctx.fillRect(42,2,8,6);
-// Stock
-ctx.fillStyle='#4a3520';ctx.fillRect(80,2,70,22);ctx.fillRect(140,0,20,26);
-// Bipod (folded)
-ctx.fillStyle='#444';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-30,25);ctx.lineTo(-40,50);ctx.stroke();ctx.beginPath();ctx.moveTo(-20,25);ctx.lineTo(-10,50);ctx.stroke();
+function drawSabot(){
+const s=isMobile?.55:.8;ctx.scale(s,s);
+// Sniper rifle pointing up
 // Grip
-ctx.fillStyle='#3a2a1a';ctx.fillRect(50,25,12,35);
-// Trigger
-ctx.strokeStyle='#555';ctx.lineWidth=2;ctx.beginPath();ctx.arc(42,32,6,0,Math.PI*.8);ctx.stroke();
+ctx.fillStyle='#3a2a1a';
+ctx.fillRect(-8,0,18,45);
+// Stock
+ctx.fillStyle='#4a3520';
+ctx.fillRect(-5,30,50,18);ctx.fillRect(35,25,25,26);
+// Cheek rest
+ctx.fillStyle='#5a4530';
+ctx.fillRect(20,20,20,10);
+// Trigger guard
+ctx.strokeStyle='#444';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(3,12,7,0,Math.PI);ctx.stroke();
+// Receiver
+ctx.fillStyle='#3a3a3a';
+ctx.fillRect(-12,-90,26,100);
+// Bolt handle
+ctx.fillStyle='#555';
+ctx.fillRect(14,-60,12,8);ctx.fillRect(22,-65,8,6);
+// Long barrel
+ctx.fillStyle='#2a2a2a';
+ctx.fillRect(-8,-260,16,175);
+// Muzzle brake (larger)
+ctx.fillStyle='#222';
+ctx.fillRect(-11,-275,22,20);
+// Scope mount
+ctx.fillStyle='#1a1a1a';
+ctx.fillRect(-4,-95,8,10);ctx.fillRect(-4,-145,8,10);
+// Scope tube
+ctx.fillStyle='#1a1a1a';
+ctx.fillRect(-20,-150,16,70);
+// Scope front lens
+ctx.beginPath();ctx.arc(-12,-155,9,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill();
+ctx.beginPath();ctx.arc(-12,-155,7,0,Math.PI*2);ctx.fillStyle='rgba(80,120,255,.25)';ctx.fill();
+// Scope rear lens
+ctx.beginPath();ctx.arc(-12,-80,8,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill();
+// Scope adjustment knobs
+ctx.fillStyle='#333';
+ctx.fillRect(-24,-120,6,6);ctx.fillRect(-8,-110,6,6);
+// Bipod (folded against barrel)
+ctx.strokeStyle='#444';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(-5,-170);ctx.lineTo(-18,-200);ctx.stroke();
+ctx.beginPath();ctx.moveTo(5,-170);ctx.lineTo(18,-200);ctx.stroke();
 // Magazine
-ctx.fillStyle='#4a4a4a';ctx.fillRect(15,25,18,25);
+ctx.fillStyle='#4a4a4a';
+ctx.fillRect(5,-50,14,30);
 // Bitcoin on stock
-ctx.fillStyle='#f7931a';ctx.font='bold 11px Arial';ctx.fillText('₿',145,18);
+ctx.fillStyle='#f7931a';ctx.font='bold 12px Arial';
+ctx.save();ctx.translate(42,42);ctx.fillText('₿',0,0);ctx.restore();
 ctx.setTransform(1,0,0,1,0,0)}
 
 // ===== UPDATE =====
